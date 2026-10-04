@@ -10,7 +10,7 @@
 <style>
 /* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: latest log bar, two-up project cards. */
 :root{
-  --paper:#f4f2ed; --dot:#cbc7bd; --side:#ebe7de; --card:#ece8df; --card-in:#f8f6f1;
+  --paper:#f4f2ed; --dot:#d4d4d4; --side:#ebe7de; --card:#ece8df; --card-in:#f8f6f1;
   --ink:#1d1c1a; --ink-soft:#5e5a53; --ink-faint:#8b867c; --rule:#d8d3c8;
   --win-bar-hi:#fbfaf7; --win-bar-lo:#efece5; --win-dot:#dcd8d0;
   --log:#1f1f1f; --log-ink:#ecebe7; --log-soft:#9a9893;
@@ -20,13 +20,13 @@
   --f-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#171716; --dot:#34332f; --side:#1e1d1b; --card:#22211f; --card-in:#2a2926;
+  --paper:#171716; --dot:#333; --side:#1e1d1b; --card:#22211f; --card-in:#2a2926;
   --ink:#eeebe5; --ink-soft:#aaa59b; --ink-faint:#7d796f; --rule:#35332f;
   --win-bar-hi:#302f2c; --win-bar-lo:#272624; --win-dot:#4a4844;
   --log:#2d2c29; --log-ink:#eeebe5; --log-soft:#9a958b;
   --c1:#e07a93; --c2:#5fb3c5; --c3:#e8a35f; --c4:#a2b874; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#171716; --dot:#34332f; --side:#1e1d1b; --card:#22211f; --card-in:#2a2926;
+  --paper:#171716; --dot:#333; --side:#1e1d1b; --card:#22211f; --card-in:#2a2926;
   --ink:#eeebe5; --ink-soft:#aaa59b; --ink-faint:#7d796f; --rule:#35332f;
   --win-bar-hi:#302f2c; --win-bar-lo:#272624; --win-dot:#4a4844;
   --log:#2d2c29; --log-ink:#eeebe5; --log-soft:#9a958b;
@@ -41,10 +41,9 @@ body{
   color:var(--ink);font:400 1rem/1.55 var(--f-body);
   background-color:var(--paper);
 }
-/* dot grid pinned to the viewport; content scrolls over it */
+/* dot grid (20px, 1px dots) pinned to the viewport; content scrolls over it */
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:radial-gradient(circle at center, var(--dot) .9px, transparent 1.15px);
-  background-size:20px 20px; background-position:-10px -10px;}
+  background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:20px 20px}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--c2);outline-offset:3px;border-radius:4px}
 .mono{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
