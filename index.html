@@ -6,7 +6,7 @@
 <title>Sharon Tieu Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Gaegu:wght@400;700&display=swap">
 <style>
 /* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: two-up project cards, playground; About view holds the bio + latest log. */
 :root{
@@ -141,15 +141,95 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .ring::after{content:"";width:42px;height:42px;border-radius:50%;background:var(--card-in)}
 .swap{position:absolute;bottom:10px;right:12px;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);background:color-mix(in srgb,var(--card-in) 80%,transparent);padding:3px 7px;border-radius:4px}
 
+/* ---------- About me: an open Hobonichi-style weekly planner (stays paper-coloured in dark mode, like a real object) ---------- */
+.hero{--pp:#fdfcf8;--grid:#dfe5e9;--line:#dcd8cf;--pen:#26241f;--faint:#7a766d;--red:#cf4259;--blue:#3c78b8;--hand:"Gaegu","Comic Sans MS",cursive;
+  position:relative;isolation:isolate;padding:10px;border-radius:16px;background:#c6d3dc;color:var(--pen);margin-bottom:26px;
+  box-shadow:0 34px 60px -34px rgba(30,24,16,.5),inset 0 0 0 1px rgba(0,0,0,.06)}
+.hero::after{content:"";position:absolute;z-index:-1;left:calc(50% + 10px);bottom:-30px;width:11px;height:46px;background:#8e9aa4;clip-path:polygon(0 0,100% 0,100% 100%,50% 84%,0 100%)}
+.spread{position:relative;display:grid;grid-template-columns:1fr 1fr}
+.spread::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:46px;margin-left:-23px;pointer-events:none;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.06) 42%,rgba(0,0,0,.13) 50%,rgba(0,0,0,.06) 58%,transparent)}
+.page{position:relative;min-width:0;padding:20px 24px 18px;background:var(--pp)}
+.pg-week{border-radius:7px 0 0 7px}
+.pg-memo{border-radius:0 7px 7px 0;display:flex;flex-direction:column;gap:14px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:14px 14px;background-position:-1px -1px}
+
+/* left page: the week */
+.wk-head{display:flex;align-items:baseline;gap:10px;padding-bottom:7px;border-bottom:1.5px solid var(--pen)}
+.wk-mon{font-size:1.15rem;font-weight:500;letter-spacing:.08em}
+.wk-jp,.wk-no{font-size:.72rem;color:var(--faint)}
+.wk-no{margin-left:auto}
+.days{list-style:none;margin:0;padding:0}
+.day{display:grid;grid-template-columns:50px 1fr;min-height:60px;border-bottom:1px solid var(--line)}
+.dt{display:grid;justify-items:center;align-content:start;gap:2px;padding:7px 0 5px;border-right:1px solid var(--line);line-height:1}
+.dt .n{position:relative;font-family:var(--f-display);font-size:1.45rem}
+.dt .wd{font-size:.56rem;font-weight:600;letter-spacing:.1em}
+.dt .kj{font-size:.62rem;color:var(--faint)}
+.dt .moon{width:12px;height:12px;margin-top:3px}
+.day.is-sat .n,.day.is-sat .wd{color:var(--blue)}
+.day.is-sun .n,.day.is-sun .wd{color:var(--red)}
+.day.today .n::after{content:"";position:absolute;inset:-6px -8px -4px;border:1.6px solid var(--red);border-radius:58% 42% 52% 48%/50% 58% 42% 50%;transform:rotate(-10deg)}
+.entry{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 8px 6px 12px;font-family:var(--hand);font-size:1.18rem;line-height:1.15}
+.doodle{flex:none;width:28px;height:28px;fill:none;stroke:var(--pen);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.wk-foot{display:grid;gap:12px;margin-top:14px}
+.tape-text{justify-self:start;max-width:calc(100% + 34px);overflow:hidden;margin-left:-34px;padding:3px 26px 1px;font-family:var(--hand);font-weight:700;font-size:1.55rem;letter-spacing:.02em;white-space:nowrap;
+  background:rgba(247,228,170,.85);transform:rotate(-2.5deg);clip-path:polygon(0 0,100% 0,98.6% 25%,100% 50%,98.6% 75%,100% 100%,0 100%,1.4% 75%,0 50%,1.4% 25%)}
+.quote{margin:0;font-size:.74rem;line-height:1.55;color:var(--faint);max-width:46ch}
+.quote b{display:block;margin-top:4px;font-weight:500;color:var(--pen)}
+
+/* right page: the collage */
+.memo-head{display:flex;justify-content:flex-end;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;color:var(--faint)}
+.hello{font-family:var(--hand);font-weight:700;line-height:.95;margin:0}
+.hello .hi{display:block;font-weight:400;font-size:1.5rem;color:var(--faint)}
+.hello .name{font-size:clamp(2.5rem,4.4vw,3.5rem);background:linear-gradient(transparent 60%,rgba(245,170,203,.75) 60% 90%,transparent 90%);padding:0 4px;margin-left:-4px}
+.intro{margin:0;font-size:.95rem;line-height:1.55;color:#4b4840;max-width:40ch}
+.collage{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:start;margin-top:4px}
+.photo{position:relative;padding:12px 6px 0}
+.heartpaper{position:absolute;z-index:0;width:122%;left:-16%;top:22%}
+.polaroid{position:relative;z-index:1;margin:0;max-width:270px;background:#fff;padding:9px 9px 36px;transform:rotate(-3deg);box-shadow:0 14px 26px -14px rgba(0,0,0,.45)}
+.polaroid img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 22%}
+.polaroid figcaption{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-family:var(--hand);font-size:1.2rem}
+.washi{position:absolute;z-index:2;width:80px;height:22px;opacity:.9;clip-path:polygon(0 0,100% 0,97% 25%,100% 50%,97% 75%,100% 100%,0 100%,3% 75%,0 50%,3% 25%)}
+.washi.w1{top:2px;left:-10px;transform:rotate(-30deg);background:repeating-linear-gradient(45deg,rgba(255,255,255,.55) 0 4px,transparent 4px 8px),#bcd0ea}
+.washi.w2{top:4px;right:-6px;transform:rotate(26deg);background:radial-gradient(circle,#fff 1.4px,transparent 1.8px) 0 0/8px 8px,#f3b9cf}
+.info{display:grid;justify-items:start;gap:12px;padding-top:18px}
+.dymo{display:inline-block;padding:5px 11px 4px 12px;border-radius:3px;font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;white-space:nowrap;
+  color:#f4f2ec;background:#1f1f22;transform:rotate(var(--r,0deg));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 3px 6px -3px rgba(0,0,0,.45);text-shadow:0 -1px 0 rgba(255,255,255,.2),0 1px 0 rgba(0,0,0,.7)}
+.dymo.pink{background:#d9799d}.dymo.blue{background:#4f7fae}
+a.dymo{transition:transform .2s}
+a.dymo:hover{transform:rotate(0deg) translateY(-2px)}
+.bubble{position:relative;background:#fff;border:1.5px solid var(--pen);border-radius:14px;padding:7px 12px;font-family:var(--hand);font-size:1.12rem;line-height:1.1}
+.bubble::after{content:"";position:absolute;left:18px;bottom:-8px;width:12px;height:12px;background:#fff;border:solid var(--pen);border-width:0 1.5px 1.5px 0;transform:rotate(45deg) skew(8deg,8deg)}
+.links{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:4px}
+.memo-foot{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-top:auto}
+.minical{background:var(--pp);border:1px solid var(--line);padding:6px 8px 7px;font-size:.6rem;line-height:1}
+.minical .cap{display:block;margin-bottom:5px;font-family:var(--f-mono);letter-spacing:.12em;color:var(--faint)}
+.minical .g{display:grid;grid-template-columns:repeat(7,1.75em);gap:3px 0;text-align:center}
+.minical .h{font-weight:600}
+.minical .sa{color:var(--blue)}.minical .su{color:var(--red)}
+.minical .td{border-radius:50%;box-shadow:0 0 0 1.4px var(--red)}
+/* stickers: die-cut white border + soft lift */
+.stk{flex:none;display:block;filter:drop-shadow(1.6px 0 0 #fff) drop-shadow(-1.6px 0 0 #fff) drop-shadow(0 1.6px 0 #fff) drop-shadow(0 -1.6px 0 #fff) drop-shadow(0 2px 2.5px rgba(0,0,0,.2));transition:transform .25s}
+.stk:hover{transform:rotate(-8deg) scale(1.08)}
+.stk-bow{position:absolute;top:44px;right:20px;width:56px;transform:rotate(12deg)}
+.stk-star{position:absolute;z-index:3;width:42px;left:calc(52% - 40px);top:44%}
+.stickers{display:flex;align-items:end;gap:6px}
+
+@media (max-width:860px){
+  .spread{grid-template-columns:1fr}
+  .spread::after{display:none}
+  .pg-memo{order:-1;border-radius:7px 7px 0 0}
+  .pg-week{border-radius:0 0 7px 7px;border-top:1px dashed var(--line)}
+}
+@media (max-width:480px){
+  .page{padding:16px 16px 14px}
+  .collage{grid-template-columns:1fr;justify-items:center}
+  .info{justify-items:center}
+  .links{justify-content:center}
+  .stk-star{left:auto;right:12%;top:36%}
+}
+
 /* about + playground */
-.about{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(18px,2.2vw,30px)}
-.panel{background:var(--card);border:1px solid var(--rule);border-radius:18px;padding:24px 26px;min-width:0}
-.panel p{margin:0 0 .9em;max-width:62ch;font-size:1.04rem}
-.panel p:last-child{margin-bottom:0}
-.facts{display:grid;gap:14px}
-.facts div{display:grid;gap:2px;padding-bottom:12px;border-bottom:1px dashed var(--rule)}
-.facts div:last-child{border-bottom:0;padding-bottom:0}
-.facts .mono{color:var(--ink-faint)}
 .play{display:grid;grid-template-columns:1fr 1fr;align-items:start;gap:clamp(14px,1.8vw,22px)}
 .tile{background:var(--card);border:1px dashed var(--ink-faint);border-radius:14px;padding:18px;display:grid;gap:6px;min-height:150px;align-content:end}
 .tile .mono{color:var(--ink-faint)}
@@ -236,7 +316,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:20px}
 
 @media (max-width:1180px){.play{grid-template-columns:1fr}}
-@media (max-width:980px){ .grid{grid-template-columns:1fr} .grid > :nth-child(even){margin-top:0} .about{grid-template-columns:1fr} .dex-app{grid-template-columns:1fr} #dexItems{max-height:220px} }
+@media (max-width:980px){ .grid{grid-template-columns:1fr} .grid > :nth-child(even){margin-top:0} .dex-app{grid-template-columns:1fr} #dexItems{max-height:220px} }
 @media (max-width:760px){
   .shell{padding-left:0}
   .rail{position:sticky;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));margin:16px 16px 0;display:flex;flex-direction:row-reverse;justify-content:center;align-items:stretch;gap:8px}
@@ -371,17 +451,61 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
   <section id="about" class="view-about" hidden aria-labelledby="about-h" style="display:grid;gap:22px">
     <div class="sec-head"><h2 id="about-h">About me</h2></div>
-    <div class="about">
-      <div class="panel">
-        <p>I'm Sharon Tieu. I started out writing documentation, which meant years of watching the gap between how software is built and how people try to use it. Design was the obvious next step: fix the screen so the manual gets shorter.</p>
-        <p>I'm Vietnamese-American and moved to Manhattan for my role at JPMorgan Chase. Outside work I'm usually out with friends or finding a new spot somewhere in the city.</p>
-        <p>✎ Add a sentence about the kind of problem that gets you out of bed.</p>
-      </div>
-      <div class="panel facts">
-        <div><span class="mono">Now</span><span>IDP Design Track, Commercial &amp; Investment Bank, JPMorgan Chase</span></div>
-        <div><span class="mono">Before</span><span>Technical writing &amp; product, EBizCharge</span></div>
-        <div><span class="mono">Trained</span><span>UX Academy, Designlab</span></div>
-        <div><span class="mono">At home</span><span>Two cats, Levi and Aiyu</span></div>
+    <div id="hello" class="hero">
+      <div class="spread">
+        <div class="page pg-week">
+          <div class="wk-head"><span class="wk-mon">SEPTEMBER</span><span class="wk-jp">9月 2026</span><span class="wk-no">40th WEEK</span></div>
+          <ol class="days" aria-label="This week">
+            <li class="day"><span class="dt"><span class="n">28</span><span class="wd">MON</span><span class="kj" lang="ja">月</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>IDP Design Track @ JPMorgan Chase</span><svg class="doodle" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></span></li>
+            <li class="day"><span class="dt"><span class="n">29</span><span class="wd">TUE</span><span class="kj" lang="ja">火</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>UX / UI designer ヾ(＾▽＾)ﾉ♪</span><svg class="doodle" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"/><path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"/><path d="m2.3 2.3 7.286 7.286"/><circle cx="11" cy="11" r="2"/></svg></span></li>
+            <li class="day"><span class="dt"><span class="n">30</span><span class="wd">WED</span><span class="kj" lang="ja">水</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>started out as a technical writer → design!</span><svg class="doodle" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg></span></li>
+            <li class="day"><span class="dt"><span class="n">1</span><span class="wd">THU</span><span class="kj" lang="ja">木</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>prev. B2B payments @ EBizCharge</span><svg class="doodle" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg></span></li>
+            <li class="day"><span class="dt"><span class="n">2</span><span class="wd">FRI</span><span class="kj" lang="ja">金</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>UX Academy @ Designlab — done ✓</span><svg class="doodle" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></span></li>
+            <li class="day is-sat"><span class="dt"><span class="n">3</span><span class="wd">SAT</span><span class="kj" lang="ja">土</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>cafe hopping around NYC</span><svg class="stk" width="34" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 14h20v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z" fill="#f4ede1" stroke="#3b2f2a" stroke-width="1.6"/><path d="M28 17h2.5a3.5 3.5 0 0 1 0 7H28" fill="none" stroke="#3b2f2a" stroke-width="1.6"/><path d="M8.6 18h18.8" stroke="#c9a27c" stroke-width="3"/><path d="M15 6c-1 2 1 3 0 5M20 5c-1 2 1 3 0 5" fill="none" stroke="#3b2f2a" stroke-width="1.4" stroke-linecap="round"/></svg></span></li>
+            <li class="day is-sun today"><span class="dt"><span class="n">4</span><span class="wd">SUN</span><span class="kj" lang="ja">日</span><svg class="moon" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/></svg></span>
+              <span class="entry"><span>home w/ Levi + Aiyu ♡</span><span class="stickers"><svg class="stk" width="34" viewBox="0 0 44 40" aria-hidden="true"><path d="M6 14 7 3l9 7h12l9-7 1 11c3 4 3 10 0 14-3 6-10 9-16 9S9 34 6 28c-3-4-3-10 0-14z" fill="#fff" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><circle cx="15" cy="21" r="2" fill="#26241f"/><circle cx="29" cy="21" r="2" fill="#26241f"/><path d="M20 25.5q2 1.6 4 0" fill="none" stroke="#26241f" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="11" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/><ellipse cx="33" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/></svg><svg class="stk" width="34" viewBox="0 0 44 40" aria-hidden="true"><path d="M6 14 7 3l9 7h12l9-7 1 11c3 4 3 10 0 14-3 6-10 9-16 9S9 34 6 28c-3-4-3-10 0-14z" fill="#d8d3ca" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><path d="M19 11.5v4M22 11v4.5M25 11.5v4" stroke="#7d776d" stroke-width="1.4" stroke-linecap="round"/><circle cx="15" cy="21" r="2" fill="#26241f"/><circle cx="29" cy="21" r="2" fill="#26241f"/><path d="M20 25.5q2 1.6 4 0" fill="none" stroke="#26241f" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="11" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/><ellipse cx="33" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/></svg></span></span></li>
+          </ol>
+          <div class="wk-foot">
+            <span class="tape-text" aria-hidden="true">keep going keep going keep going</span>
+            <p class="quote">I started as a technical writer, so I care a lot about making complicated things read clearly.<b>Sharon Tieu, designer</b></p>
+          </div>
+        </div>
+
+        <div class="page pg-memo">
+          <div class="memo-head" aria-hidden="true">MEMO</div>
+          <h3 class="hello"><span class="hi">hi, i'm</span> <span class="name">Sharon Tieu</span></h3>
+          <p class="intro">UX / UI designer in New York, currently in the IDP Design Track at JPMorgan Chase.</p>
+          <div class="collage">
+            <div class="photo">
+              <svg class="heartpaper" viewBox="0 0 200 180" aria-hidden="true"><path d="M100 172S8 118 8 58C8 26 32 8 56 8c20 0 34 12 44 28C110 20 124 8 144 8c24 0 48 18 48 50 0 60-92 114-92 114z" fill="#f4d2e2"/><path d="M40 70q15-8 30 0t30 0 30 0 30 0M48 92q13-8 26 0t26 0 26 0 26 0M62 114q10-7 19 0t19 0 19 0 19 0" fill="none" stroke="#eab6cd" stroke-width="2"/></svg>
+              <span class="washi w1" aria-hidden="true"></span><span class="washi w2" aria-hidden="true"></span>
+              <figure class="polaroid"><img src="assets/portrait.webp" width="720" height="949" alt="Portrait of Sharon smiling, in a cream cable-knit sweater"><figcaption>me! ♡ nyc</figcaption></figure>
+            </div>
+            <div class="info">
+              <span class="dymo" style="--r:-2deg">UX / UI designer</span>
+              <span class="dymo pink" style="--r:1.5deg">New York, NY</span>
+              <span class="bubble">say hi! ↓</span>
+              <!-- ✎ point these at your real email, LinkedIn profile and resume -->
+              <div class="links">
+                <a class="dymo blue" style="--r:-1deg" href="#">Email</a>
+                <a class="dymo" style="--r:2deg" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+                <a class="dymo pink" style="--r:-2deg" href="#">Resume</a>
+              </div>
+            </div>
+          </div>
+          <svg class="stk stk-bow" viewBox="0 0 48 32" aria-hidden="true"><path d="M24 16C18 6 6 2 4 8s2 16 8 16 10-4 12-8zm0 0c6-10 18-14 20-8s-2 16-8 16-10-4-12-8z" fill="#f4a9c4" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><path d="M21 16l-5 14 4-2 3 3 1-15M27 16l5 14-4-2-3 3-1-15" fill="#f4a9c4" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="24" cy="16" r="3.4" fill="#f7c4d6" stroke="#26241f" stroke-width="1.5"/></svg>
+          <svg class="stk stk-star" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 10.5 11.5 1.6-8.3 8 2 11.4L20 29l-10.2 5.5 2-11.4-8.3-8L15 13.5z" fill="#ffe27a" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16.5" cy="20" r="1.4" fill="#26241f"/><circle cx="23.5" cy="20" r="1.4" fill="#26241f"/><path d="M18.5 23.5q1.5 1.3 3 0" fill="none" stroke="#26241f" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div class="memo-foot">
+            <span class="stickers" aria-hidden="true"><svg class="stk" width="36" viewBox="0 0 40 36"><path d="M20 33S4 23 4 12.5A8.5 8.5 0 0 1 20 8a8.5 8.5 0 0 1 16 4.5C36 23 20 33 20 33z" fill="#f08bb0" stroke="#26241f" stroke-width="1.5"/><path d="M10 11.5a4 4 0 0 1 4-3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div class="minical" aria-hidden="true"><span class="cap" id="calCap">OCT 2026</span><div class="g" id="calGrid"></div></div>
+          </div>
+        </div>
       </div>
     </div>
     <details class="log">
@@ -436,6 +560,42 @@ const io=new IntersectionObserver(es=>{
   });
   // re-arm once the cursor is back outside the window
   document.addEventListener('pointerover',e=>{ if(shield.hidden && !box.contains(e.target)) shield.hidden=false; });
+})();
+
+/* ---------- About planner: this week's dates, moon phases and mini calendar, in New York time ---------- */
+(function(){
+  const hero=document.getElementById('hello'); if(!hero) return;
+  const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date());
+  const get=t=>+parts.find(p=>p.type===t).value;
+  const today=new Date(Date.UTC(get('year'),get('month')-1,get('day')));
+  const dow=(today.getUTCDay()+6)%7;                                   // Mon=0 … Sun=6
+  const monday=new Date(today); monday.setUTCDate(today.getUTCDate()-dow);
+  const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  const ord=n=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);};
+  const isoWeek=d=>{const t=new Date(d);t.setUTCDate(t.getUTCDate()+3-((t.getUTCDay()+6)%7));const j=new Date(Date.UTC(t.getUTCFullYear(),0,4));
+    return 1+Math.round(((t-j)/864e5-3+((j.getUTCDay()+6)%7))/7);};
+  // moon: fraction of the synodic month since a known new moon; lit side drawn over a dark disc
+  const phase=d=>{const p=((d-Date.UTC(2000,0,6,18,14))/864e5/29.530588853)%1;return p<0?p+1:p;};
+  const moon=p=>{const rx=(6*Math.abs(Math.cos(2*Math.PI*p))).toFixed(2),cres=p<.25||p>=.75;
+    const lit=p<.5?`M7 1A6 6 0 0 1 7 13A${rx} 6 0 0 ${cres?0:1} 7 1Z`:`M7 1A6 6 0 0 0 7 13A${rx} 6 0 0 ${cres?1:0} 7 1Z`;
+    return `<circle cx="7" cy="7" r="6" fill="#4b4840"/><path d="${lit}" fill="#fdfcf8"/><circle cx="7" cy="7" r="6" fill="none" stroke="#4b4840"/>`;};
+
+  hero.querySelector('.wk-mon').textContent=MONTHS[monday.getUTCMonth()];
+  hero.querySelector('.wk-jp').textContent=`${monday.getUTCMonth()+1}月 ${monday.getUTCFullYear()}`;
+  hero.querySelector('.wk-no').textContent=`${ord(isoWeek(monday))} WEEK`;
+  hero.querySelectorAll('.day').forEach((row,i)=>{
+    const d=new Date(monday); d.setUTCDate(monday.getUTCDate()+i);
+    row.querySelector('.n').textContent=d.getUTCDate();
+    row.querySelector('.moon').innerHTML=moon(phase(d));
+    row.classList.toggle('today',i===dow);
+  });
+
+  const y=today.getUTCFullYear(), m=today.getUTCMonth();
+  document.getElementById('calCap').textContent=`${MONTHS[m].slice(0,3)} ${y}`;
+  const lead=(new Date(Date.UTC(y,m,1)).getUTCDay()+6)%7, len=new Date(Date.UTC(y,m+1,0)).getUTCDate();
+  let html=['M','T','W','T','F','S','S'].map((h,i)=>`<span class="h${i===5?' sa':i===6?' su':''}">${h}</span>`).join('')+'<span></span>'.repeat(lead);
+  for(let d=1;d<=len;d++){const c=(lead+d-1)%7;html+=`<span class="${[c===5?'sa':c===6?'su':'',d===today.getUTCDate()?'td':''].join(' ').trim()}">${d}</span>`;}
+  document.getElementById('calGrid').innerHTML=html;
 })();
 
 /* ---------- one-file navigation: About is a separate view ---------- */
