@@ -50,27 +50,36 @@ a{color:inherit}
 .mono{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
 h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;line-height:1.08}
 
-.shell{display:grid;grid-template-columns:clamp(260px,24vw,340px) 1fr;min-height:100vh}
+:root{--side-w:clamp(260px,24vw,340px)}
+.shell{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:100vh}
 
 /* sidebar */
 aside{background:var(--side);border-right:1px solid var(--rule);padding:clamp(28px,3vw,44px) clamp(20px,2.4vw,36px);position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto;display:flex;flex-direction:column;gap:26px}
-.logo{width:44px;height:44px}
 aside h1{font-size:clamp(2.2rem,3.4vw,2.9rem)}
 .role{color:var(--ink-soft);margin-top:10px;line-height:1.6}
 .bio p{margin:0 0 .8em;color:var(--ink-soft);font-size:1.02rem}
 .bio b{font-weight:500;color:var(--ink)}
-/* explore dock: icons magnify toward the cursor (macOS-style), labels show as tooltips */
-.explore .mono{display:block;margin-bottom:6px;color:var(--ink)}
-.dock{padding-top:20px}
-.dock-panel{display:flex;align-items:flex-end;gap:12px;width:fit-content;height:56px;padding:0 12px 8px;background:var(--card);border:1px solid var(--rule);border-radius:16px}
-.dock a{--w:40px;position:relative;flex:none;width:var(--w);height:var(--w);display:grid;place-items:center;border-radius:50%;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink-soft);text-decoration:none}
-.dock a:hover,.dock a.on{color:var(--ink)}
-.dock a.on{background:color-mix(in srgb,var(--ink) 14%,transparent)}
-.dock a.on::after{content:"";position:absolute;bottom:-6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--ink)}
-.dock svg{width:50%;height:50%}
-.dock .tip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translate(-50%,6px);opacity:0;pointer-events:none;white-space:nowrap;font-size:.75rem;color:var(--ink);background:var(--card-in);border:1px solid var(--rule);border-radius:6px;padding:2px 8px;transition:opacity .2s,transform .2s}
-.dock a:hover .tip,.dock a:focus-visible .tip{opacity:1;transform:translate(-50%,-4px)}
-@media (hover:none){.dock a.on .tip{opacity:1;transform:translate(-50%,-4px)}}
+/* floating dock nav: pinned to the bottom of the content column; hovered icon and its neighbours scale up */
+.fdock{position:fixed;z-index:50;bottom:calc(28px + env(safe-area-inset-bottom,0px));left:calc(var(--side-w) + (100vw - var(--side-w)) / 2);transform:translateX(-50%)}
+.fdock-panel{display:flex;align-items:flex-end;gap:8px;padding:12px;border-radius:16px;border:1px solid color-mix(in srgb,var(--rule) 60%,transparent);
+  background:color-mix(in srgb,var(--card-in) 80%,transparent);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:0 25px 50px -12px rgba(30,24,16,.3)}
+.fdock a{--s:1;position:relative;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;color:var(--ink-soft);text-decoration:none;
+  transform:scale(var(--s));transform-origin:bottom;transition:transform .3s ease-out,background-color .3s ease-out,color .2s}
+.fdock svg{width:20px;height:20px}
+.fdock a.on{background:color-mix(in srgb,var(--c2) 14%,transparent);color:var(--c2)}
+.fdock a.on::after{content:"";position:absolute;bottom:-4px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--c2)}
+.fdock .tip{position:absolute;bottom:100%;left:50%;margin-bottom:8px;transform:translateX(-50%);display:none;padding:6px 12px;border-radius:8px;white-space:nowrap;font-size:.75rem;line-height:1.2;background:var(--ink);color:var(--paper)}
+.fdock .tip::after{content:"";position:absolute;top:100%;left:50%;margin-left:-4px;border:4px solid transparent;border-top-color:var(--ink)}
+.fdock a:focus-visible .tip{display:block}
+@media (hover:hover){
+  .fdock a:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+  .fdock a.on:hover{background:color-mix(in srgb,var(--c2) 14%,transparent)}
+  .fdock a:hover .tip{display:block}
+  .fdock a:hover{--s:1.4}
+  .fdock a:hover + a,.fdock a:has(+ a:hover){--s:1.2}
+  .fdock a:hover + a + a,.fdock a:has(+ a + a:hover){--s:1.1}
+}
+@media (hover:none){.fdock a.on .tip{display:block}}
 .outbound .mono{color:var(--ink);display:block;margin-bottom:6px}
 .outbound p{margin:0;color:var(--ink-soft);line-height:1.8}
 .outbound a{text-decoration:none;border-bottom:1px solid var(--rule)}
@@ -79,7 +88,7 @@ aside h1{font-size:clamp(2.2rem,3.4vw,2.9rem)}
 .clock b{font-family:var(--f-mono);font-weight:400;font-size:1.05rem;color:var(--ink);font-variant-numeric:tabular-nums}
 
 /* main */
-main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
+main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 140px;min-width:0;display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
 
 .log{background:var(--log);color:var(--log-ink);border-radius:16px;padding:22px 26px;font-family:var(--f-mono)}
 .log summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -230,6 +239,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 @media (max-width:980px){ .grid{grid-template-columns:1fr} .grid > :nth-child(even){margin-top:0} .about{grid-template-columns:1fr} .dex-app{grid-template-columns:1fr} #dexItems{max-height:220px} }
 @media (max-width:760px){
   .shell{grid-template-columns:1fr}
+  :root{--side-w:0px}
   aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule)}
   .clock{margin-top:0}
   .play{grid-template-columns:1fr}
@@ -243,36 +253,31 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <aside>
-  <svg class="logo" viewBox="0 0 44 44" aria-hidden="true">
-    <rect x="4" y="10" width="20" height="26" rx="4" fill="var(--c2)" transform="rotate(-8 14 23)"/>
-    <circle cx="30" cy="14" r="7" fill="var(--c1)"/>
-    <path d="M27 30l10 0-5 9z" fill="var(--c3)"/>
-  </svg>
   <div>
-    <h1>Shae Tieu</h1>
+    <h1>Sharon Tieu</h1>
     <div class="role mono">UX / UI designer<br>New York</div>
   </div>
   <div class="bio">
     <p>I'm a designer who started as a technical writer, so I care a lot about making complicated things read clearly.</p>
     <p>Designing <b>@JPMorgan Chase</b> in the IDP Design Track, previously in B2B payments at <b>@EBizCharge</b>.</p>
   </div>
-  <nav class="explore" aria-label="Sections">
-    <span class="mono">Explore</span>
-    <div class="dock"><div class="dock-panel">
-      <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></a>
-      <a href="#about" aria-label="About me"><span class="tip" aria-hidden="true">About me</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
-      <a href="#playground" aria-label="Playground"><span class="tip" aria-hidden="true">Playground</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg></a>
-    </div></div>
-  </nav>
   <div class="outbound">
     <span class="mono">Outbound</span>
     <p><a href="#">✎ Email</a>, <a href="https://www.linkedin.com/" target="_blank" rel="noopener">✎ LinkedIn</a>, <a href="#">✎ Resume</a></p>
   </div>
   <div class="clock"><span class="mono">NYC</span><b id="clock">--:--:--</b></div>
 </aside>
+
+<nav class="fdock" aria-label="Sections">
+  <div class="fdock-panel">
+    <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></a>
+    <a href="#about" aria-label="About me"><span class="tip" aria-hidden="true">About me</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <a href="#playground" aria-label="Playground"><span class="tip" aria-hidden="true">Playground</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg></a>
+  </div>
+</nav>
 
 <main>
   <details class="log">
@@ -403,7 +408,7 @@ function tick(){clock.textContent=fmt.format(new Date());}
 tick(); setInterval(tick,1000);
 
 // highlight the nav item for the section in view
-const links=[...document.querySelectorAll('.explore a')];
+const links=[...document.querySelectorAll('.fdock a')];
 const io=new IntersectionObserver(es=>{
   es.forEach(e=>{ if(e.isIntersecting && !window.__onAbout){ links.forEach(l=>l.classList.toggle('on', l.getAttribute('href')==='#'+e.target.id)); } });
 },{rootMargin:'-40% 0px -55% 0px'});
@@ -430,39 +435,11 @@ const io=new IntersectionObserver(es=>{
   document.addEventListener('pointerover',e=>{ if(shield.hidden && !box.contains(e.target)) shield.hidden=false; });
 })();
 
-/* ---------- dock magnification (spring-eased, like framer-motion's useSpring) ---------- */
-(function(){
-  const panel=document.querySelector('.dock-panel');
-  if(!panel||matchMedia('(hover: none)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const BASE=40, MAG=64, DIST=120, K=150, C=12, M=.1;   // sizes in px; spring stiffness/damping/mass
-  const items=[...panel.querySelectorAll('a')].map(el=>({el,x:BASE,v:0}));
-  let mouseX=Infinity, raf=0, last=0;
-  function goal(it){
-    if(mouseX===Infinity) return BASE;
-    const r=it.el.getBoundingClientRect(), d=Math.abs(mouseX-r.left-r.width/2);
-    return d>=DIST?BASE:MAG-(MAG-BASE)*d/DIST;
-  }
-  function step(t){
-    const dt=Math.min((t-(last||t))/1000,1/30); last=t;
-    let moving=false;
-    for(const it of items){
-      const g=goal(it);
-      for(let i=0;i<4;i++){ const h=dt/4; it.v+=(-K*(it.x-g)-C*it.v)/M*h; it.x+=it.v*h; }
-      if(Math.abs(it.x-g)>.05||Math.abs(it.v)>.05) moving=true; else { it.x=g; it.v=0; }
-      it.el.style.setProperty('--w',it.x.toFixed(2)+'px');
-    }
-    if(moving) raf=requestAnimationFrame(step); else { raf=0; last=0; }
-  }
-  const kick=()=>{ if(!raf) raf=requestAnimationFrame(step); };
-  panel.addEventListener('pointermove',e=>{ mouseX=e.clientX; kick(); });
-  panel.addEventListener('pointerleave',()=>{ mouseX=Infinity; kick(); });
-})();
-
 /* ---------- one-file navigation: About is a separate view ---------- */
 (function(){
   const homeParts=[...document.querySelectorAll('main > .log, main > #work, main > #playground')];
   const aboutView=document.getElementById('about');
-  const navLinks=[...document.querySelectorAll('.explore a')];
+  const navLinks=[...document.querySelectorAll('.fdock a')];
   window.__onAbout=false;
   function route(){
     const id=(location.hash||'').slice(1);
