@@ -104,25 +104,27 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .sec-head h2{font-family:var(--f-mono);font-weight:500;font-size:clamp(1.05rem,1.6vw,1.3rem);letter-spacing:.1em;text-transform:uppercase}
 .sec-head .mono{color:var(--ink-faint)}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.2vw,30px)}
-.grid > :nth-child(even){margin-top:52px}
-.card{padding:0 0 20px;display:flex;flex-direction:column;gap:14px;text-decoration:none;min-width:0;transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s}
+/* My work is capped so each card stays ~400px wide; its heading row caps with it */
+#work{max-width:820px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,22px)}
+.grid > :nth-child(even){margin-top:36px}
+.card{padding:0 0 14px;display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0;transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s}
 .card:hover{transform:translateY(-4px) rotate(-.3deg);box-shadow:0 18px 40px -24px rgba(40,32,20,.45)}
-.media{aspect-ratio:16/10;border-radius:12px;position:relative;overflow:hidden;display:grid;place-items:center;padding:6%}
+.media{aspect-ratio:2/1;border-radius:12px;position:relative;overflow:hidden;display:grid;place-items:center;padding:6%}
 .card .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 6px}
-.card h3{font-size:1.75rem}
+.card h3{font-size:1.35rem}
 .chip{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink-soft);padding:4px 8px;border-radius:4px;white-space:nowrap}
-.card p{margin:0;padding:0 6px;color:var(--ink-soft);font-size:1.02rem}
+.card p{margin:0;padding:0 6px;color:var(--ink-soft);font-size:.9rem;line-height:1.5}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);padding:4px 6px 0}
-.stat{padding:0 14px;border-left:1px solid var(--rule);min-width:0}
+.stat{padding:0 12px;border-left:1px solid var(--rule);min-width:0}
 .stat:first-child{padding-left:0;border-left:0}
-.stat b{display:block;font-family:var(--f-display);font-weight:400;font-size:1.5rem;color:var(--ink-faint)}
-.stat .mono{font-size:.64rem;color:var(--ink-faint)}
+.stat b{display:block;font-family:var(--f-display);font-weight:400;font-size:1.2rem;color:var(--ink-faint)}
+.stat .mono{font-size:.6rem;color:var(--ink-faint)}
 
 /* mini mockups inside media (illustrative; swap for real screens) */
-.mock{background:var(--card-in);border-radius:12px;box-shadow:0 10px 30px -14px rgba(0,0,0,.35);padding:16px 18px;width:min(88%,360px);font-size:.85rem;color:var(--ink);display:grid;gap:10px}
+.mock{background:var(--card-in);border-radius:12px;box-shadow:0 10px 30px -14px rgba(0,0,0,.35);padding:12px 14px;width:min(80%,300px);font-size:.78rem;color:var(--ink);display:grid;gap:8px}
 .mock .t{font-weight:600;display:flex;justify-content:space-between}
-.mock .s{color:var(--ink-faint);font-size:.75rem}
+.mock .s{color:var(--ink-faint);font-size:.7rem}
 .bar{height:10px;border-radius:99px;background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden;display:flex}
 .bar i{display:block;height:100%}
 .legend{display:flex;justify-content:space-between;font-size:.75rem;color:var(--ink-soft)}
@@ -162,7 +164,12 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .demo-head h3{font-size:1.6rem;margin-top:4px}
 .embed{border-radius:12px;overflow:hidden;background:#0a0a0a}
 .embed iframe{display:block;width:100%;border:0}
-.dex-embed iframe,.clow-embed iframe{height:760px}
+/* demos render at 75%: the iframe is laid out 4/3 larger and scaled down, so its contents shrink too */
+.dex-embed,.clow-embed{height:570px}
+.dex-embed iframe,.clow-embed iframe{width:133.334%;height:760px;transform:scale(.75);transform-origin:0 0}
+/* 3D model: drag to orbit, scroll/pinch to zoom; matches the demo height */
+.model-embed{height:570px;background:radial-gradient(circle at 50% 40%,var(--card-in),var(--card))}
+.model-embed model-viewer{display:block;width:100%;height:100%;--poster-color:transparent;--progress-bar-color:var(--c2)}
 .demo-head .live{font-weight:600;color:var(--ink);text-underline-offset:3px;white-space:nowrap}
 .demo-head p{margin:0;color:var(--ink-soft);font-size:.94rem;max-width:46ch}
 
@@ -214,16 +221,16 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .stage-hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;color:var(--ink-soft);z-index:3}
 /* mac-style window chrome */
 .win{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--card-in);box-shadow:0 10px 28px -20px rgba(40,32,20,.45);display:flex;flex-direction:column;min-width:0}
-.win-bar{position:relative;height:34px;flex:0 0 34px;display:flex;align-items:center;gap:7px;padding:0 12px;background:linear-gradient(var(--win-bar-hi),var(--win-bar-lo));border-bottom:1px solid var(--rule)}
+.win-bar{position:relative;height:30px;flex:0 0 30px;display:flex;align-items:center;gap:7px;padding:0 12px;background:linear-gradient(var(--win-bar-hi),var(--win-bar-lo));border-bottom:1px solid var(--rule)}
 .win-bar i{width:11px;height:11px;border-radius:50%;background:var(--win-dot);border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
-.win-bar span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.8rem;color:var(--ink);pointer-events:none;padding:0 70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-bar span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.72rem;color:var(--ink);pointer-events:none;padding:0 70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .media{border-radius:0}
-.card .row,.card p,.card .stats{padding-left:20px;padding-right:20px}
+.card .row,.card p,.card .stats{padding-left:16px;padding-right:16px}
 .demo.win{padding:0;gap:0;border-radius:14px}
 .demo.win .dex-app,.demo.win .stage,.demo.win .embed{border-radius:0}
 /* cursor bubble over the Pokédex */
 .dex-demo{position:relative}
-.hover-shield{position:absolute;left:0;right:0;top:34px;bottom:0;z-index:5;cursor:pointer}
+.hover-shield{position:absolute;left:0;right:0;top:30px;bottom:0;z-index:5;cursor:pointer}
 .cursor-bubble{position:fixed;left:0;top:0;z-index:60;pointer-events:none;font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;color:#f1efe9;background:rgba(38,38,40,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .18s ease}
 .cursor-bubble.show{opacity:1}
 footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:20px}
@@ -247,6 +254,8 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 @media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .clock{padding:0 12px}  .stat{padding:0 8px} .stat b{font-size:1.25rem} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.1/dist/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -348,6 +357,14 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
       <div class="demo card-demo win">
         <div class="win-bar"><i></i><i></i><i></i><span>clowcard</span></div>
         <div class="embed clow-embed"><iframe src="https://sharon-tieu.github.io/clow-card/" title="Cardcaptor Sakura card by Sharon Tieu" loading="lazy"></iframe></div>
+      </div>
+
+      <div class="demo model-demo win">
+        <div class="win-bar"><i></i><i></i><i></i><span>3d model</span></div>
+        <div class="embed model-embed">
+          <model-viewer src="assets/model.glb" alt="3D model by Sharon Tieu" camera-controls auto-rotate auto-rotate-delay="1500" rotation-per-second="18deg"
+            interaction-prompt="none" shadow-intensity="0.6" exposure="1" loading="lazy" touch-action="pan-y"></model-viewer>
+        </div>
       </div>
     </div>
   </section>
