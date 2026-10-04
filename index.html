@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: latest log bar, two-up project cards. */
+/* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: two-up project cards, playground; About view holds the bio + latest log. */
 :root{
   --paper:#f4f2ed; --dot:#d4d4d4; --side:#ebe7de; --card:#ece8df; --card-in:#f8f6f1;
   --ink:#1d1c1a; --ink-soft:#5e5a53; --ink-faint:#8b867c; --rule:#d8d3c8;
@@ -267,19 +267,6 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <main>
   <h1 class="sr">Sharon Tieu, UX / UI designer in New York</h1>
-  <details class="log">
-    <summary>
-      <span class="tag"><span class="mono">Latest log</span><span class="date">Oct 2026</span></span>
-      <svg class="chev" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-    </summary>
-    <p class="latest">3 months into the Innovations Design Program &amp; the Design Development Program at JPMorgan Chase. Rebuilding this portfolio.<span class="caret" aria-hidden="true"></span></p>
-    <ol>
-      <li><span>Jul 2026</span><span>Big moves to New York and trying out every cafe!</span></li>
-      <li><span>Jan 2025 – Jan 2026</span><span>Started and completed UX Academy at Designlab.</span></li>
-      <li><span>Jul 2024</span><span>Technical writing and UX writing at EBizCharge. Learning all things payment processing!</span></li>
-    </ol>
-  </details>
-
   <section id="work" aria-labelledby="work-h" style="display:grid;gap:22px">
     <div class="sec-head"><h2 id="work-h">My work</h2><span class="mono">4 case studies</span></div>
     <div class="grid">
@@ -380,6 +367,18 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
         <div><span class="mono">At home</span><span>Two cats, Levi and Aiyu</span></div>
       </div>
     </div>
+    <details class="log">
+      <summary>
+        <span class="tag"><span class="mono">Latest log</span><span class="date">Oct 2026</span></span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </summary>
+      <p class="latest">3 months into the Innovations Design Program &amp; the Design Development Program at JPMorgan Chase. Rebuilding this portfolio.<span class="caret" aria-hidden="true"></span></p>
+      <ol>
+        <li><span>Jul 2026</span><span>Big moves to New York and trying out every cafe!</span></li>
+        <li><span>Jan 2025 – Jan 2026</span><span>Started and completed UX Academy at Designlab.</span></li>
+        <li><span>Jul 2024</span><span>Technical writing and UX writing at EBizCharge. Learning all things payment processing!</span></li>
+      </ol>
+    </details>
   </section>
 
   <footer><span>© 2026 Sharon Tieu</span><span>Designed in New York, built with Claude</span></footer>
@@ -424,7 +423,7 @@ const io=new IntersectionObserver(es=>{
 
 /* ---------- one-file navigation: About is a separate view ---------- */
 (function(){
-  const homeParts=[...document.querySelectorAll('main > .log, main > #work, main > #playground')];
+  const homeParts=[...document.querySelectorAll('main > #work, main > #playground')];
   const aboutView=document.getElementById('about');
   const navLinks=[...document.querySelectorAll('.fdock a')];
   window.__onAbout=false;
