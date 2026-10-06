@@ -279,7 +279,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .win{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--card-in);box-shadow:0 10px 28px -20px rgba(40,32,20,.45);display:flex;flex-direction:column;min-width:0}
 .win-bar{position:relative;height:30px;flex:0 0 30px;display:flex;align-items:center;gap:7px;padding:0 12px;background:linear-gradient(var(--win-bar-hi),var(--win-bar-lo));border-bottom:1px solid var(--rule)}
 .win-bar i{width:11px;height:11px;border-radius:50%;background:var(--win-dot);border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
-.win-bar span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.72rem;color:var(--ink);pointer-events:none;padding:0 70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-bar > span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.66rem;color:var(--ink);pointer-events:none;padding:0 56px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .demo.win{padding:0;gap:0;border-radius:14px}
 .demo.win .dex-app,.demo.win .stage,.demo.win .embed{border-radius:0}
 /* cursor bubble over the Pokédex */
@@ -315,7 +315,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <div class="rail">
-  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono">NYC</span><b id="clock">--:--:--</b></div>
+  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono">New York</span><b id="clock">--:--:--</b></div>
   <nav class="fdock" aria-label="Sections">
     <div class="fdock-panel">
       <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
@@ -385,9 +385,9 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
       </div>
 
       <div class="demo model-demo win">
-        <div class="win-bar"><i></i><i></i><i></i><span>3d model</span></div>
+        <div class="win-bar"><i></i><i></i><i></i><span>Ji xiang jie - <span lang="zh-Hant">吉祥結</span> (Lucky Knot)</span></div>
         <div class="embed model-embed">
-          <model-viewer src="assets/model.glb" alt="3D model by Sharon Tieu" camera-controls auto-rotate auto-rotate-delay="1500" rotation-per-second="18deg"
+          <model-viewer src="assets/model.glb" alt="Ji xiang jie (吉祥結), a red Chinese lucky knot, 3D model by Sharon Tieu" camera-controls auto-rotate auto-rotate-delay="1500" rotation-per-second="18deg"
             interaction-prompt="none" shadow-intensity="0.6" exposure="1" loading="lazy" touch-action="pan-y"></model-viewer>
         </div>
       </div>
