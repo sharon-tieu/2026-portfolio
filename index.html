@@ -154,35 +154,23 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .hw-title{margin:0 0 6px;font-family:var(--hand);font-weight:700;font-size:clamp(2rem,3.3vw,2.7rem);line-height:1}
 .hw-title .hi{display:block;font-weight:400;font-size:.55em;color:#7c776d}
 .hw-title mark{background:linear-gradient(transparent 58%,rgba(244,170,203,.8) 58% 90%,transparent 90%);color:inherit;padding:0 4px;margin-left:-4px}
-.sb-row{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:8px;align-items:center}
-.photo-stk{position:relative;margin:8px 0 0;transform:rotate(-4deg)}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end;margin:4px 0 22px}
+.photo-stk{position:relative;margin:8px 0 0;transform:rotate(-4deg);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.cats-stk{transform:rotate(3deg)}
+/* hover: the photo sticker tips the other way and lifts a little */
+.photo-stk:hover{transform:rotate(3deg) scale(1.05)}
+.cats-stk:hover{transform:rotate(-4deg) scale(1.05)}
+.cats-stk figcaption{margin-top:8px;text-align:center;color:var(--pink)}
 .photo-stk img{display:block;width:100%;height:auto;filter:drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(0 6px 8px rgba(0,0,0,.22))}
 .washi{position:absolute;z-index:2;width:86px;height:22px;opacity:.88;clip-path:polygon(0 0,100% 0,97% 25%,100% 50%,97% 75%,100% 100%,0 100%,3% 75%,0 50%,3% 25%)}
 .washi.w1{top:6%;left:-6%;transform:rotate(-32deg);background:repeating-linear-gradient(45deg,rgba(255,255,255,.55) 0 4px,transparent 4px 8px),#bcd2ee}
-.washi.w2{bottom:10%;right:-4%;transform:rotate(-24deg);background:radial-gradient(circle,#fff 1.4px,transparent 1.8px) 0 0/8px 8px,#f3b9cf}
-.notes{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.washi.w2{top:4%;right:-6%;transform:rotate(28deg);background:radial-gradient(circle,#fff 1.4px,transparent 1.8px) 0 0/8px 8px,#f3b9cf}
+.notes{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .notes li{position:relative;padding-left:4px}
 .notes li:nth-child(2){color:var(--blue);transform:rotate(-2deg)}
 .notes li:nth-child(3){color:var(--pink)}
-.notes .arw{position:absolute;left:-46px;top:2px;width:44px;height:24px}
 .doo{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .meal{position:absolute;left:40px;bottom:12px;margin:0}
-.hw-h{display:inline-block;margin:0 0 10px;font-family:var(--hand);font-weight:700;font-size:1.6rem}
-.hw-h svg{display:block;width:100%;height:10px;color:#ec7a2c}
-.checks{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:9px}
-.checks li{display:flex;align-items:baseline;gap:10px}
-.checks li::before{content:"✓";flex:none;display:grid;place-items:center;width:17px;height:17px;border:1.6px solid var(--pen);border-radius:3px 4px 3px 5px;transform:rotate(-4deg);
-  color:var(--pink);font-weight:700;font-size:1.05rem;line-height:1}
-.checks li.todo::before{content:""}
-.checks small{font-size:.8em;color:#8a857b}
-.cats{display:flex;align-items:end;gap:18px;margin:4px 0 22px}
-.cats figure{margin:0;display:grid;justify-items:center;gap:2px}
-.cats figcaption{font-family:var(--hand);font-size:1.1rem}
-.cats .hw{align-self:center;color:var(--pink)}
-.sayhi{display:flex;align-items:center;flex-wrap:wrap;gap:10px 12px}
-.flag{display:inline-block;padding:3px 18px 2px 10px;font-family:var(--hand);font-weight:700;font-size:1.15rem;color:var(--pen);text-decoration:none;
-  clip-path:polygon(0 0,100% 0,86% 50%,100% 100%,0 100%);transform:rotate(var(--r,0deg));transition:transform .2s}
-.flag:hover{transform:rotate(0deg) translateX(3px)}
 /* stickers: die-cut white border */
 .stk{position:absolute;z-index:3;display:block;filter:drop-shadow(1.8px 0 0 #fff) drop-shadow(-1.8px 0 0 #fff) drop-shadow(0 1.8px 0 #fff) drop-shadow(0 -1.8px 0 #fff) drop-shadow(0 2px 3px rgba(0,0,0,.2));transition:transform .25s}
 .stk.inl{position:static}
@@ -199,9 +187,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
   .dh-n{font-size:3.4rem}
   .dg{padding:14px 10px 72px 30px}
   .df-quote,.df-by{padding-left:0}
-  .sb-row{grid-template-columns:1fr}
-  .notes .arw{display:none}
-  .photo-stk{max-width:240px;justify-self:center}
+  .pics{gap:10px}
   .m-hide{display:none}
 }
 
@@ -396,17 +382,18 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
           <div class="dg">
             <span class="dg-12" aria-hidden="true">12</span><svg class="dg-meal" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
             <h3 class="hw-title"><span class="hi">hi, i'm</span> <mark>Sharon Tieu</mark>!</h3>
-            <div class="sb-row">
-              <figure class="photo-stk"><span class="washi w1" aria-hidden="true"></span><span class="washi w2" aria-hidden="true"></span><img src="assets/portrait-cutout.webp" width="760" height="964" alt="Sharon smiling, in a cream cable-knit sweater"></figure>
-              <ul class="notes hw">
-                <li><svg class="arw doo" viewBox="0 0 44 24" aria-hidden="true"><path d="M42 6C30 2 16 6 6 16"/><path d="M5 8 6 16l8 1"/></svg>UX / UI designer ✎</li>
-                <li>based in New York ✶</li>
-                <li>now: IDP Design Track @ JPMorgan Chase</li>
-              </ul>
+            <div class="pics">
+              <figure class="photo-stk"><span class="washi w1" aria-hidden="true"></span><img src="assets/portrait-cutout.webp" width="760" height="964" alt="Sharon smiling, in a cream cable-knit sweater"></figure>
+              <figure class="photo-stk cats-stk"><span class="washi w2" aria-hidden="true"></span><img src="assets/cats-cutout.webp" width="720" height="763" alt="Sharon's two cats: a brown tabby with a white chest and a fluffy cream cat"><figcaption class="hw">Levi + Aiyu ♡</figcaption></figure>
             </div>
+            <ul class="notes hw">
+              <li>UX / UI designer ✎</li>
+              <li>based in New York ✶</li>
+              <li>now: IDP Design Track @ JPMorgan Chase</li>
+            </ul>
             <p class="hw meal">lunch: a new cafe, obviously ☕</p>
             <svg class="stk" style="width:44px;top:14px;right:16px;transform:rotate(10deg)" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3l5 10.5 11.5 1.6-8.3 8 2 11.4L20 29l-10.2 5.5 2-11.4-8.3-8L15 13.5z" fill="#ffe27a" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16.5" cy="20" r="1.6" fill="#26241f"/><circle cx="23.5" cy="20" r="1.6" fill="#26241f"/><path d="M18.0 23q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="12.5" cy="23" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="27.5" cy="23" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
-            <svg class="stk m-hide" style="width:58px;bottom:96px;left:42%;transform:rotate(-6deg)" viewBox="0 0 56 38" aria-hidden="true"><path d="M14 34h30a10 10 0 0 0 1.5-19.9A13 13 0 0 0 20.6 10 10 10 0 0 0 14 34z" fill="#dcebff" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><circle cx="25" cy="23" r="1.6" fill="#26241f"/><circle cx="35" cy="23" r="1.6" fill="#26241f"/><path d="M28.0 26q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="21" cy="26" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="39" cy="26" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
+            <svg class="stk m-hide" style="width:54px;bottom:10px;right:4%;transform:rotate(-6deg)" viewBox="0 0 56 38" aria-hidden="true"><path d="M14 34h30a10 10 0 0 0 1.5-19.9A13 13 0 0 0 20.6 10 10 10 0 0 0 14 34z" fill="#dcebff" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><circle cx="25" cy="23" r="1.6" fill="#26241f"/><circle cx="35" cy="23" r="1.6" fill="#26241f"/><path d="M28.0 26q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="21" cy="26" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="39" cy="26" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
             <svg class="stk m-hide" style="width:38px;bottom:52px;right:14%;transform:rotate(12deg)" viewBox="0 0 40 42" aria-hidden="true"><path d="M20 11c8-1 15 4 14 12-1 9-8 15-14 16C14 38 7 32 6 23 5 15 12 10 20 11z" fill="#f47c8e" stroke="#26241f" stroke-width="1.5"/><path d="M12 9l8 4 8-4-3 6h-10z" fill="#7cc97a" stroke="#26241f" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 4v6" stroke="#26241f" stroke-width="1.5" stroke-linecap="round"/><circle cx="16" cy="24" r="1.6" fill="#26241f"/><circle cx="24" cy="24" r="1.6" fill="#26241f"/><path d="M18.0 27q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="12" cy="27" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="28" cy="27" rx="2.3" ry="1.3" fill="#f5b3c8"/><g fill="#ffe7a0"><circle cx="11" cy="20" r=".9"/><circle cx="29" cy="19" r=".9"/><circle cx="13" cy="31" r=".9"/><circle cx="27" cy="31" r=".9"/></g></svg>
             <svg class="sprk doo" style="top:70px;right:26%" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v7M12 15v7M2 12h7M15 12h7"/></svg><svg class="sprk doo" style="top:58%;left:46%;width:14px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v7M12 15v7M2 12h7M15 12h7"/></svg>
           </div>
@@ -417,32 +404,6 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
           <div class="dh"><span class="dh-n">11</span><span class="dh-day"><b>SUNDAY</b><span>October</span><small>W41</small></span><span class="dh-moon"><svg viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor"/></svg><small>284</small></span></div>
           <div class="dg">
             <span class="dg-12" aria-hidden="true">12</span><svg class="dg-meal" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
-            <p class="hw-h">my story so far<svg viewBox="0 0 120 10" preserveAspectRatio="none" aria-hidden="true"><path class="doo" d="M2 6q7-6 14 0t14 0 14 0 14 0 14 0 14 0 14 0 14 0"/></svg></p>
-            <ul class="checks hw">
-              <li>started out as a technical writer</li>
-              <li>B2B payments @ EBizCharge <small>2024</small></li>
-              <li>UX Academy @ Designlab <small>2025</small></li>
-              <li>moved to NYC + every cafe <small>Jul 2026</small></li>
-              <li class="todo">keep making complicated things read clearly ♡</li>
-            </ul>
-            <p class="hw-h" style="font-size:1.35rem">roomies</p>
-            <div class="cats">
-              <figure><svg class="stk inl" width="54" viewBox="0 0 44 40" aria-hidden="true"><path d="M6 14 7 3l9 7h12l9-7 1 11c3 4 3 10 0 14-3 6-10 9-16 9S9 34 6 28c-3-4-3-10 0-14z" fill="#fff" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><circle cx="15" cy="21" r="2" fill="#26241f"/><circle cx="29" cy="21" r="2" fill="#26241f"/><path d="M20 25.5q2 1.6 4 0" fill="none" stroke="#26241f" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="11" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/><ellipse cx="33" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/></svg><figcaption>Levi</figcaption></figure>
-              <figure><svg class="stk inl" width="54" viewBox="0 0 44 40" aria-hidden="true"><path d="M6 14 7 3l9 7h12l9-7 1 11c3 4 3 10 0 14-3 6-10 9-16 9S9 34 6 28c-3-4-3-10 0-14z" fill="#d8d3ca" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><path d="M19 11.5v4M22 11v4.5M25 11.5v4" stroke="#7d776d" stroke-width="1.4" stroke-linecap="round"/><circle cx="15" cy="21" r="2" fill="#26241f"/><circle cx="29" cy="21" r="2" fill="#26241f"/><path d="M20 25.5q2 1.6 4 0" fill="none" stroke="#26241f" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="11" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/><ellipse cx="33" cy="26" rx="2.6" ry="1.5" fill="#f5b3c8"/></svg><figcaption>Aiyu</figcaption></figure>
-              <span class="hw">← my 2 cats ♡</span>
-            </div>
-            <!-- ✎ point these at your real email, LinkedIn profile and resume -->
-            <div class="sayhi"><span class="hw-h" style="margin:0;font-size:1.35rem">say hi →</span>
-              <a class="flag" style="background:#ffd6e6;--r:-2deg" href="#">Email</a>
-              <a class="flag" style="background:#d6e6ff;--r:1.5deg" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
-              <a class="flag" style="background:#e4f6c9;--r:-1deg" href="#">Resume</a>
-            </div>
-            <p class="hw meal">dinner w/ friends, somewhere new ♡</p>
-            <svg class="stk" style="width:58px;top:14px;right:18px;transform:rotate(14deg)" viewBox="0 0 48 32" aria-hidden="true"><path d="M24 16C18 6 6 2 4 8s2 16 8 16 10-4 12-8zm0 0c6-10 18-14 20-8s-2 16-8 16-10-4-12-8z" fill="#f4a9c4" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><path d="M21 16l-5 14 4-2 3 3 1-15M27 16l5 14-4-2-3 3-1-15" fill="#f4a9c4" stroke="#26241f" stroke-width="1.5" stroke-linejoin="round"/><circle cx="24" cy="16" r="3.4" fill="#f7c4d6" stroke="#26241f" stroke-width="1.5"/></svg>
-            <svg class="stk m-hide" style="width:48px;bottom:58px;right:10%;transform:rotate(-8deg)" viewBox="0 0 44 50" aria-hidden="true"><path d="M15 24C11 14 11 3 15.5 2.5S21 12 21 22M29 24c4-10 4-21-.5-21.5S23 12 23 22" fill="#fff" stroke="#26241f" stroke-width="1.6" stroke-linejoin="round"/><path d="M15.5 8c-1 4 0 9 2 13M28.5 8c1 4 0 9-2 13" fill="none" stroke="#f5b3c8" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="22" cy="34" rx="16" ry="13.5" fill="#fff" stroke="#26241f" stroke-width="1.6"/><circle cx="17" cy="33" r="1.6" fill="#26241f"/><circle cx="27" cy="33" r="1.6" fill="#26241f"/><path d="M20.0 36q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="13" cy="36" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="31" cy="36" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
-            <svg class="stk m-hide" style="width:34px;top:58%;right:9%;transform:rotate(10deg)" viewBox="0 0 40 36" aria-hidden="true"><path d="M20 33S4 23 4 12.5A8.5 8.5 0 0 1 20 8a8.5 8.5 0 0 1 16 4.5C36 23 20 33 20 33z" fill="#f08bb0" stroke="#26241f" stroke-width="1.5"/><circle cx="16" cy="18" r="1.6" fill="#26241f"/><circle cx="24" cy="18" r="1.6" fill="#26241f"/><path d="M18.0 21q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="12" cy="21" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="28" cy="21" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
-            <svg class="stk m-hide" style="width:40px;top:47%;right:30%;transform:rotate(-10deg)" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 14h20v10a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z" fill="#f4ede1" stroke="#3b2f2a" stroke-width="1.6"/><path d="M28 17h2.5a3.5 3.5 0 0 1 0 7H28" fill="none" stroke="#3b2f2a" stroke-width="1.6"/><path d="M15 6c-1 2 1 3 0 5M20 5c-1 2 1 3 0 5" fill="none" stroke="#3b2f2a" stroke-width="1.4" stroke-linecap="round"/><circle cx="14" cy="21" r="1.6" fill="#26241f"/><circle cx="22" cy="21" r="1.6" fill="#26241f"/><path d="M16.0 24q2 1.8 4 0" fill="none" stroke="#26241f" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="10" cy="24" rx="2.3" ry="1.3" fill="#f5b3c8"/><ellipse cx="26" cy="24" rx="2.3" ry="1.3" fill="#f5b3c8"/></svg>
-            <svg class="sprk doo" style="top:150px;right:30%;width:14px" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v7M12 15v7M2 12h7M15 12h7"/></svg>
           </div>
         <div class="df">
           <p class="df-by">Sharon Tieu<br>UX / UI designer, New York<br>“About me”</p>
