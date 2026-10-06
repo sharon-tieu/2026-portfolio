@@ -105,13 +105,22 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .sec-head .mono{color:var(--ink-faint)}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,22px)}
-.card{padding:0 0 14px;display:flex;flex-direction:column;gap:10px;text-decoration:none;min-width:0;background:var(--card-in);border:1px solid var(--rule);border-radius:14px;overflow:hidden;box-shadow:0 10px 28px -20px rgba(40,32,20,.45);transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s}
-.card:hover{transform:translateY(-4px) rotate(-.3deg);box-shadow:0 18px 40px -24px rgba(40,32,20,.45)}
-.media{aspect-ratio:2/1;border-radius:12px;position:relative;overflow:hidden;display:grid;place-items:center;padding:6%}
-.card .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 6px}
-.card h3{font-size:1.35rem}
-.chip{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink-soft);padding:4px 8px;border-radius:4px;white-space:nowrap}
-.card p{margin:0;padding:0 6px;color:var(--ink-soft);font-size:.9rem;line-height:1.5}
+/* project cards: title + arrow, a stack of three tiles that fans out on hover, stats, description */
+.card{display:flex;flex-direction:column;gap:20px;min-width:0;padding:24px;border:1px solid var(--rule);border-radius:16px;background:var(--card-in);color:var(--ink);
+  text-decoration:none;box-shadow:0 1px 2px rgba(40,32,20,.06);transition:transform .3s ease-in-out,box-shadow .3s ease-in-out}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -20px rgba(40,32,20,.45)}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.card h3{font-family:var(--f-body);font-weight:600;font-size:clamp(1.5rem,2.2vw,1.85rem);letter-spacing:-.03em}
+.card-arrow{flex:none;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s ease-in-out}
+.card:hover .card-arrow{transform:translateX(4px)}
+.stack{position:relative;height:128px}
+.stack span{position:absolute;top:0;left:0;z-index:calc(3 - var(--i));width:40%;height:100%;border:2px solid var(--card-in);border-radius:10px;
+  box-shadow:0 6px 14px -6px rgba(40,32,20,.35);transform:translateX(calc(var(--i) * 32px));transition:transform .3s ease-in-out}
+.card:hover .stack span{transform:translateX(calc(var(--i) * 80px)) rotate(calc(var(--i) * 5deg - 5deg))}
+.card-stats{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:0;list-style:none;font-size:.85rem;color:var(--ink-soft)}
+.card-stats li{display:flex;align-items:center;gap:6px}
+.card-stats svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card p{margin:-8px 0 0;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
 
 
 /* ---------- About me: a Hobonichi Techo daily spread (this week's Sat + Sun), scrapbooked with notes, doodles and stickers ---------- */
@@ -266,8 +275,6 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .win-bar{position:relative;height:30px;flex:0 0 30px;display:flex;align-items:center;gap:7px;padding:0 12px;background:linear-gradient(var(--win-bar-hi),var(--win-bar-lo));border-bottom:1px solid var(--rule)}
 .win-bar i{width:11px;height:11px;border-radius:50%;background:var(--win-dot);border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
 .win-bar span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.72rem;color:var(--ink);pointer-events:none;padding:0 70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .media{border-radius:0}
-.card .row,.card p{padding-left:16px;padding-right:16px}
 .demo.win{padding:0;gap:0;border-radius:14px}
 .demo.win .dex-app,.demo.win .stage,.demo.win .embed{border-radius:0}
 /* cursor bubble over the Pokédex */
@@ -322,27 +329,35 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
     <div class="sec-head"><h2 id="work-h">My work</h2><span class="mono">4 case studies</span></div>
     <div class="grid">
 
-      <a class="card" href="#work">
-        <div class="media" style="background:linear-gradient(135deg,color-mix(in srgb,var(--c2) 35%,var(--card-in)),color-mix(in srgb,var(--c4) 25%,var(--card-in)))" aria-hidden="true"></div>
-        <div class="row"><h3>Pairwise Finance</h3><span class="chip">Designlab</span></div>
+      <a class="card" href="#work" aria-label="Learn more about Pairwise Finance">
+        <div class="card-head"><h3>Pairwise Finance</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
+        <div class="stack" aria-hidden="true"><span style="--i:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c2) 45%,var(--card-in)),color-mix(in srgb,var(--c4) 30%,var(--card-in)))"></span><span style="--i:1;background:linear-gradient(135deg,color-mix(in srgb,var(--c2) 30%,var(--card-in)),color-mix(in srgb,var(--c4) 45%,var(--card-in)))"></span><span style="--i:2;background:linear-gradient(135deg,color-mix(in srgb,var(--c2) 20%,var(--card-in)),color-mix(in srgb,var(--c4) 20%,var(--card-in)))"></span></div>
+        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Fintech</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
         <p>Budgeting for couples that turns shared money from a source of tension into a shared plan.</p>
       </a>
 
-      <a class="card" href="#work">
-        <div class="media" style="background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 30%,var(--card-in)),color-mix(in srgb,var(--c3) 22%,var(--card-in)))" aria-hidden="true"></div>
-        <div class="row"><h3>SENSE</h3><span class="chip">Designlab</span></div>
+      <a class="card" href="#work" aria-label="Learn more about SENSE">
+        <div class="card-head"><h3>SENSE</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
+        <div class="stack" aria-hidden="true"><span style="--i:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 45%,var(--card-in)),color-mix(in srgb,var(--c3) 30%,var(--card-in)))"></span><span style="--i:1;background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 30%,var(--card-in)),color-mix(in srgb,var(--c3) 45%,var(--card-in)))"></span><span style="--i:2;background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 20%,var(--card-in)),color-mix(in srgb,var(--c3) 20%,var(--card-in)))"></span></div>
+        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Health tech</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
         <p>A women's health and fitness app that adapts training to the body instead of a generic plan.</p>
       </a>
 
-      <a class="card" href="#work">
-        <div class="media" style="background:linear-gradient(135deg,color-mix(in srgb,var(--c4) 30%,var(--card-in)),color-mix(in srgb,var(--c2) 20%,var(--card-in)))" aria-hidden="true"></div>
-        <div class="row"><h3>Roomster</h3><span class="chip">Designlab</span></div>
+      <a class="card" href="#work" aria-label="Learn more about Roomster">
+        <div class="card-head"><h3>Roomster</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
+        <div class="stack" aria-hidden="true"><span style="--i:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c4) 45%,var(--card-in)),color-mix(in srgb,var(--c2) 30%,var(--card-in)))"></span><span style="--i:1;background:linear-gradient(135deg,color-mix(in srgb,var(--c4) 30%,var(--card-in)),color-mix(in srgb,var(--c2) 45%,var(--card-in)))"></span><span style="--i:2;background:linear-gradient(135deg,color-mix(in srgb,var(--c4) 20%,var(--card-in)),color-mix(in srgb,var(--c2) 20%,var(--card-in)))"></span></div>
+        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Social</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
         <p>A roommate matching redesign built around trust: what people need to see before they share a lease.</p>
       </a>
 
-      <a class="card" href="#work">
-        <div class="media" style="background:linear-gradient(135deg,color-mix(in srgb,var(--c3) 32%,var(--card-in)),color-mix(in srgb,var(--c3) 14%,var(--card-in)))" aria-hidden="true"></div>
-        <div class="row"><h3>Mando</h3><span class="chip">Designlab</span></div>
+      <a class="card" href="#work" aria-label="Learn more about Mando">
+        <div class="card-head"><h3>Mando</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
+        <div class="stack" aria-hidden="true"><span style="--i:0;background:linear-gradient(135deg,color-mix(in srgb,var(--c3) 45%,var(--card-in)),color-mix(in srgb,var(--c1) 30%,var(--card-in)))"></span><span style="--i:1;background:linear-gradient(135deg,color-mix(in srgb,var(--c3) 30%,var(--card-in)),color-mix(in srgb,var(--c1) 45%,var(--card-in)))"></span><span style="--i:2;background:linear-gradient(135deg,color-mix(in srgb,var(--c3) 20%,var(--card-in)),color-mix(in srgb,var(--c1) 20%,var(--card-in)))"></span></div>
+        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>EdTech</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
         <p>Mandarin learning built around tones and characters, for learners who stall after the basics.</p>
       </a>
 
