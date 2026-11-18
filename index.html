@@ -67,9 +67,6 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 /* nav: vertical dock fixed to the top-left edge, NYC clock fixed to the bottom-left corner; the hovered icon and its neighbours scale up */
 .rail .fdock{position:fixed;z-index:50;left:calc(16px + env(safe-area-inset-left,0px))}
 .rail .fdock{top:calc(24px + env(safe-area-inset-top,0px))}
-/* location + time: top-right of the page, on the content column's right edge; scrolls away with the page */
-.rail .clock{position:absolute;z-index:50;top:calc(clamp(24px,3vw,46px) + env(safe-area-inset-top,0px));
-  right:max(calc(clamp(16px,3vw,46px) + env(safe-area-inset-right,0px)),calc((100vw - 1400px) / 2 + clamp(16px,3vw,46px)))}
 .fdock-panel{border-radius:var(--radius-feature);border:1px solid var(--oat-border);
   background:var(--pure-white);box-shadow:var(--clay-shadow)}
 .fdock-panel{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:12px}
@@ -91,6 +88,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 }
 @media (hover:none){.fdock a.on .tip{display:block}}
 .clock{display:flex;flex-direction:row;align-items:center;gap:12px;padding:0;color:var(--ink-soft)}
+.intro .clock{margin-top:16px}
 .clock .loc{position:relative;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:var(--cursor-hot);border-radius:4px}
 /* hover / focus on New York: where Sharon lived before, stacked */
 .clock .prev{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
@@ -128,10 +126,11 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 
 /* home headline */
 .intro{padding:clamp(8px,2vw,24px) 0 clamp(4px,1vw,12px)}
-/* headline in the Clay face; only the name and role in Brunswick Grotesque */
-.intro h1{max-width:18ch;font-family:var(--f-body);font-weight:400;letter-spacing:-.02em;word-spacing:.06em;font-size:clamp(2.4rem,5.4vw,4rem);line-height:1.05}
-.intro .gro{font-family:"Brunswick Grotesque",var(--f-body);font-weight:400;letter-spacing:0}
-.intro em{font-style:normal;font-weight:600;color:var(--blueberry-800)}
+/* the name in Brunswick Grotesque, then one modest line in Plus Jakarta Sans (regular) */
+.intro h1{display:grid;gap:10px}
+.intro .name{font-family:"Brunswick Grotesque",var(--f-body);font-weight:400;font-size:clamp(2.5rem,5vw,3.5rem);line-height:1}
+.intro .role{font-family:var(--f-body);font-weight:400;font-size:1.25rem;line-height:1.4;letter-spacing:normal;color:var(--clay-black)}
+.intro em{font-style:normal;color:var(--blueberry-800)}
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
 .sec-head h2{font-family:var(--f-mono);font-weight:700;font-size:clamp(1.05rem,1.6vw,1.3rem);letter-spacing:.1em;text-transform:uppercase}
 .sec-head .mono{color:var(--ink-faint)}
@@ -275,7 +274,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .win{border:1px solid var(--oat-border);border-radius:var(--radius-feature);overflow:hidden;background:var(--pure-white);box-shadow:var(--clay-shadow);display:flex;flex-direction:column;min-width:0}
 .win-bar{position:relative;height:30px;flex:0 0 30px;display:flex;align-items:center;gap:7px;padding:0 12px;background:linear-gradient(var(--win-bar-hi),var(--win-bar-lo));border-bottom:1px solid var(--rule)}
 .win-bar i{width:11px;height:11px;border-radius:50%;background:var(--win-dot);border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
-.win-bar > span{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-mono);font-size:.66rem;color:var(--ink);pointer-events:none;padding:0 56px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-bar > span{position:absolute;left:0;right:0;text-align:center;font-family:"Brunswick Grotesque",var(--f-body);font-size:.78rem;color:var(--ink);pointer-events:none;padding:0 56px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .demo.win{padding:0;gap:0;border-radius:var(--radius-feature)}
 .demo.win .dex-app,.demo.win .stage,.demo.win .embed{border-radius:0}
 /* cursor bubble over the Pokédex */
@@ -289,22 +288,18 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 @media (max-width:980px){ .grid{grid-template-columns:1fr} .dex-app{grid-template-columns:1fr} #dexItems{max-height:220px} }
 @media (max-width:760px){
   .shell{padding-left:0}
-  .rail{position:sticky;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));margin:16px 16px 0;display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:stretch;gap:8px}
-  .rail .fdock,.rail .clock{position:static}
-  .rail .clock{top:auto;right:auto}
+  .rail{position:sticky;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));margin:16px 16px 0;display:flex;flex-direction:row;justify-content:flex-start;align-items:stretch;gap:8px}
+  .rail .fdock{position:static}
   .fdock-panel{flex-direction:row}
   .fdock a{transform-origin:top}
   .fdock a.on::after{left:50%;top:auto;bottom:-4px;margin:0 0 0 -2px}
   .fdock .tip{left:50%;top:100%;margin:12px 0 0;transform:translateX(-50%)}
   .fdock .tip::after{right:auto;left:50%;top:auto;bottom:100%;margin:0 0 0 -4px;border-right-color:transparent;border-bottom-color:var(--ink)}
-  .clock{flex-direction:row;align-items:center;justify-content:center;gap:10px;padding:0 4px;border-radius:var(--radius-feature);background:var(--warm-cream)}
   main > section{scroll-margin-top:110px}
   .play{grid-template-columns:1fr}
   .log li{grid-template-columns:1fr;gap:2px}
 }
-@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .clock{padding:0 12px} }
-/* narrow phones: no room for location and time on one line beside the dock, so they stack */
-@media (max-width:440px){ .clock{flex-direction:column;align-items:flex-end;gap:4px} .clock .prev{left:auto;right:0} }
+@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 <!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
@@ -314,7 +309,6 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <div class="rail">
-  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
   <nav class="fdock" aria-label="Sections">
     <div class="fdock-panel">
       <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
@@ -329,10 +323,10 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <main>
   <header class="intro" id="intro">
-    <h1><span class="gro">Sharon</span> is a <span class="gro">UXUI Designer</span> who is currently working at <em>J.P.Morgan</em>.</h1>
+    <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
+    <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
   </header>
-  <section id="work" aria-labelledby="work-h" style="display:grid;gap:22px">
-    <div class="sec-head"><h2 id="work-h">My work</h2><span class="mono">4 case studies</span></div>
+  <section id="work" aria-label="My work" style="display:grid;gap:22px">
     <div class="grid">
 
       <a class="card feature" href="market-monitor.html" aria-label="Read the Capital Markets - Market Monitor case study">
@@ -371,8 +365,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   </section>
 
 
-  <section id="playground" aria-labelledby="play-h" style="display:grid;gap:22px">
-    <div class="sec-head"><h2 id="play-h">Playground</h2><span class="mono">Small experiments</span></div>
+  <section id="playground" aria-label="Playground" style="display:grid;gap:22px">
     <div class="play">
       <div class="demo dex-demo win" id="dex">
         <div class="win-bar"><i></i><i></i><i></i><span>sharon's pokedex</span></div>
@@ -493,6 +486,16 @@ const io=new IntersectionObserver(es=>{
   // re-arm once the cursor is back outside the window
   document.addEventListener('pointerover',e=>{ if(shield.hidden && !box.contains(e.target)) shield.hidden=false; });
 })();
+
+/* ---------- 3D model: model-viewer draws its own grab cursor inside its shadow DOM; swap in the site's circle ---------- */
+customElements.whenDefined('model-viewer').then(()=>{
+  document.querySelectorAll('model-viewer').forEach(mv=>{
+    if(!mv.shadowRoot) return;
+    const st=document.createElement('style');
+    st.textContent='*{cursor:var(--cursor-hot,pointer)!important}';
+    mv.shadowRoot.appendChild(st);
+  });
+});
 
 /* ---------- one-file navigation: About is a separate view ---------- */
 (function(){
