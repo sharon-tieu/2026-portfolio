@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
 <style>
-/* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: two-up project cards, playground; About view holds the bio + latest log. */
+/* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, New York time at the top right; content column: two-up project cards, playground; About view holds the bio + latest log. */
 /* Plus Jakarta Sans (fonts/, SIL OFL): one variable WOFF2 per character set, weights 400–700 */
 @font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin-ext.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
@@ -28,7 +28,7 @@
   --radius-sharp:4px; --radius-card:12px; --radius-feature:24px; --radius-section:40px; --radius-pill:1584px;
   --clay-shadow:rgba(0,0,0,.1) 0px 1px 1px, rgba(0,0,0,.04) 0px -1px 1px inset, rgba(0,0,0,.05) 0px -.5px 1px;
   --hover-hard:-7px 7px 0px 0px #000000;
-  --ease-enter:cubic-bezier(.34,1.12,.64,1); --motion-base:240ms;
+  --ease-enter:cubic-bezier(.34,1.12,.64,1); --ease-exit:cubic-bezier(.7,0,.84,0); --motion-fast:150ms; --motion-base:240ms;
 
   /* the site's own names, mapped onto Clay */
   --paper:var(--warm-cream); --dot:var(--oat-border); --card:var(--warm-cream); --card-in:var(--pure-white);
@@ -53,6 +53,10 @@ body{
   background-color:var(--paper);
 }
 a{color:inherit}
+/* cursor: a black ring, a filled dot over anything clickable (white edge keeps both visible on dark swatches) */
+:root{--cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='3.5'/%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E") 12 12, auto;--cursor-hot:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23000' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") 12 12, pointer}
+html{cursor:var(--cursor)}
+a,button,summary,label,[tabindex]:not([tabindex="-1"]){cursor:var(--cursor-hot)}
 :focus-visible{outline:2px solid var(--focus-blue);outline-offset:3px;border-radius:4px}
 .mono{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
 h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin:0;text-wrap:balance;line-height:1.1}
@@ -61,9 +65,11 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .shell{--rail:112px;max-width:1400px;margin:0 auto;min-height:100vh;padding-left:max(0px,calc(var(--rail) - max(0px,(100vw - 1400px) / 2)))}
 
 /* nav: vertical dock fixed to the top-left edge, NYC clock fixed to the bottom-left corner; the hovered icon and its neighbours scale up */
-.rail .fdock,.rail .clock{position:fixed;z-index:50;left:calc(16px + env(safe-area-inset-left,0px))}
+.rail .fdock{position:fixed;z-index:50;left:calc(16px + env(safe-area-inset-left,0px))}
 .rail .fdock{top:calc(24px + env(safe-area-inset-top,0px))}
-.rail .clock{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+/* location + time: top-right of the page, on the content column's right edge; scrolls away with the page */
+.rail .clock{position:absolute;z-index:50;top:calc(clamp(24px,3vw,46px) + env(safe-area-inset-top,0px));
+  right:max(calc(clamp(16px,3vw,46px) + env(safe-area-inset-right,0px)),calc((100vw - 1400px) / 2 + clamp(16px,3vw,46px)))}
 .fdock-panel{border-radius:var(--radius-feature);border:1px solid var(--oat-border);
   background:var(--pure-white);box-shadow:var(--clay-shadow)}
 .fdock-panel{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:12px}
@@ -84,8 +90,16 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
   .fdock a:hover + a + a,.fdock a:has(+ a + a:hover){--s:1.1}
 }
 @media (hover:none){.fdock a.on .tip{display:block}}
-.clock{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 4px;color:var(--ink-soft)}
-.clock .loc{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.clock{display:flex;flex-direction:row;align-items:center;gap:12px;padding:0;color:var(--ink-soft)}
+.clock .loc{position:relative;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:var(--cursor-hot);border-radius:4px}
+/* hover / focus on New York: where Sharon lived before, stacked */
+.clock .prev{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;
+  transition:opacity var(--motion-fast) var(--ease-exit),transform var(--motion-fast) var(--ease-exit),visibility 0s linear var(--motion-fast);gap:4px;min-width:118px;padding:10px 12px;
+  background:var(--pure-white);border:1px solid var(--oat-border);border-radius:var(--radius-card);box-shadow:var(--clay-shadow);color:var(--clay-black);text-align:left}
+.clock .prev-h{font-size:.58rem;color:var(--warm-charcoal)}
+.clock .loc:hover .prev,.clock .loc:focus .prev,.clock .loc:focus-within .prev{opacity:1;visibility:visible;transform:none;
+  transition:opacity var(--motion-base) var(--ease-enter),transform var(--motion-base) var(--ease-enter),visibility 0s}
 .clock .loc svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .clock .time{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
 .clock .tz{font-size:.62rem}
@@ -96,7 +110,7 @@ main > section{scroll-margin-top:24px}
 main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
 
 .log{background:var(--log);color:var(--log-ink);border-radius:var(--radius-feature);padding:22px 26px;font-family:var(--f-mono)}
-.log summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.log summary{list-style:none;cursor:var(--cursor-hot);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .log summary::-webkit-details-marker{display:none}
 .log .tag{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
 .log .tag .mono{font-size:.9rem;letter-spacing:.14em}
@@ -216,14 +230,14 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .dex-list{display:flex;flex-direction:column;gap:10px;min-width:0}
 #dexSearch{font:inherit;font-size:.92rem;padding:9px 14px;border-radius:99px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);width:100%}
 .dex-types{display:flex;gap:6px;flex-wrap:wrap}
-.dex-types button{font:500 .72rem var(--f-body);padding:4px 10px;border-radius:99px;border:1px solid var(--rule);background:transparent;color:var(--ink-soft);cursor:pointer}
+.dex-types button{font:500 .72rem var(--f-body);padding:4px 10px;border-radius:99px;border:1px solid var(--rule);background:transparent;color:var(--ink-soft);cursor:var(--cursor-hot)}
 .dex-types button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 #dexItems{list-style:none;margin:0;padding:0;overflow:auto;max-height:200px;display:grid;gap:4px;align-content:start}
-#dexItems li{display:grid;grid-template-columns:3.6em 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:.92rem}
+#dexItems li{display:grid;grid-template-columns:3.6em 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;cursor:var(--cursor-hot);font-size:.92rem}
 #dexItems li:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
 #dexItems li[aria-selected="true"]{background:color-mix(in srgb,var(--ink) 10%,transparent)}
 #dexItems li .no{font-family:var(--f-mono);font-size:.75rem;color:var(--ink-faint)}
-#dexItems .empty{color:var(--ink-faint);cursor:default}
+#dexItems .empty{color:var(--ink-faint);cursor:var(--cursor)}
 .types{display:flex;gap:4px}
 .ty{font-size:.66rem;font-weight:600;padding:2px 8px;border-radius:99px;color:#fff;text-transform:capitalize}
 .ty.grass{background:#4f8f3f}.ty.poison{background:#8f4fa3}.ty.fire{background:#d0612a}.ty.flying{background:#6f84c9}.ty.water{background:#3a76bd}.ty.electric{background:#b8930f}.ty.normal{background:#8a8577}.ty.fairy{background:#c25c8e}
@@ -245,7 +259,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
   background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--c1) 30%,var(--card-in)),color-mix(in srgb,var(--c3) 14%,var(--card-in)) 75%)}
 .spark{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .spark.front{z-index:2}
-.cc{position:relative;z-index:1;width:min(36%,170px);aspect-ratio:5/8;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;border-radius:10px}
+.cc{position:relative;z-index:1;width:min(36%,170px);aspect-ratio:5/8;border:0;padding:0;background:none;cursor:var(--cursor-hot);transform-style:preserve-3d;border-radius:10px}
 .cc .face{position:absolute;inset:0;border-radius:10px;padding:7%;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 14px 30px -12px rgba(80,30,20,.55);background:linear-gradient(160deg,#f3cf7a,#c88b37)}
 .cc .back{transform:rotateY(180deg)}
 .cc-in{height:100%;border-radius:6px;display:grid;place-items:center;position:relative;border:1px solid rgba(255,238,205,.75);overflow:hidden}
@@ -266,7 +280,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .demo.win .dex-app,.demo.win .stage,.demo.win .embed{border-radius:0}
 /* cursor bubble over the Pokédex */
 .dex-demo{position:relative}
-.hover-shield{position:absolute;left:0;right:0;top:30px;bottom:0;z-index:5;cursor:pointer}
+.hover-shield{position:absolute;left:0;right:0;top:30px;bottom:0;z-index:5;cursor:var(--cursor-hot)}
 .cursor-bubble{position:fixed;left:0;top:0;z-index:60;pointer-events:none;font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;color:#f1efe9;background:rgba(38,38,40,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .18s ease}
 .cursor-bubble.show{opacity:1}
 footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:20px}
@@ -275,19 +289,22 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 @media (max-width:980px){ .grid{grid-template-columns:1fr} .dex-app{grid-template-columns:1fr} #dexItems{max-height:220px} }
 @media (max-width:760px){
   .shell{padding-left:0}
-  .rail{position:sticky;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));margin:16px 16px 0;display:flex;flex-direction:row-reverse;justify-content:center;align-items:stretch;gap:8px}
+  .rail{position:sticky;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));margin:16px 16px 0;display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:stretch;gap:8px}
   .rail .fdock,.rail .clock{position:static}
+  .rail .clock{top:auto;right:auto}
   .fdock-panel{flex-direction:row}
   .fdock a{transform-origin:top}
   .fdock a.on::after{left:50%;top:auto;bottom:-4px;margin:0 0 0 -2px}
   .fdock .tip{left:50%;top:100%;margin:12px 0 0;transform:translateX(-50%)}
   .fdock .tip::after{right:auto;left:50%;top:auto;bottom:100%;margin:0 0 0 -4px;border-right-color:transparent;border-bottom-color:var(--ink)}
-  .clock{flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;padding:0 12px;border-radius:var(--radius-feature);background:var(--warm-cream)}
+  .clock{flex-direction:row;align-items:center;justify-content:center;gap:10px;padding:0 4px;border-radius:var(--radius-feature);background:var(--warm-cream)}
   main > section{scroll-margin-top:110px}
   .play{grid-template-columns:1fr}
   .log li{grid-template-columns:1fr;gap:2px}
 }
 @media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .clock{padding:0 12px} }
+/* narrow phones: no room for location and time on one line beside the dock, so they stack */
+@media (max-width:440px){ .clock{flex-direction:column;align-items:flex-end;gap:4px} .clock .prev{left:auto;right:0} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 <!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
@@ -297,7 +314,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <div class="rail">
-  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York</span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
+  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
   <nav class="fdock" aria-label="Sections">
     <div class="fdock-panel">
       <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
