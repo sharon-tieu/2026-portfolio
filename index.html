@@ -139,15 +139,15 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,22px)}
 /* project cards (Clay): a swatch panel framing placeholder screens, uppercase pill badges, title, copy,
-   and a pill CTA that fills with the card's swatch and casts the hard offset shadow on hover */
+   and a pill CTA that fills with the card's swatch on hover */
 .card{--sw:var(--matcha-300);--sw-ink:var(--ink);display:flex;flex-direction:column;gap:18px;min-width:0;padding:6px;
-  border:1px solid var(--oat-border);border-radius:18px;background:var(--pure-white);color:var(--ink);text-decoration:none;
-  box-shadow:var(--clay-shadow);transition:transform var(--motion-base) var(--ease-enter),box-shadow var(--motion-base) var(--ease-enter)}
+  border:0;border-radius:18px;background:var(--pure-white);color:var(--ink);text-decoration:none;
+  box-shadow:none;transition:transform var(--motion-base) var(--ease-enter),box-shadow var(--motion-base) var(--ease-enter)}
 .card:hover{transform:translateY(-4px)}
 .card.feature + .card{grid-column-start:1}
 .card-panel{position:relative;height:clamp(190px,18vw,230px);overflow:hidden;border-radius:var(--radius-card);background:var(--sw)}
 .stack{position:absolute;left:28px;right:28px;bottom:-22px;height:150px}
-.stack span{position:absolute;bottom:0;left:0;z-index:calc(3 - var(--i));width:min(44%,220px);height:100%;border:1px solid var(--oat-border);border-radius:var(--radius-card);
+.stack span{position:absolute;bottom:0;left:0;z-index:calc(3 - var(--i));width:min(44%,220px);height:100%;border:0;border-radius:var(--radius-card);
   background:var(--pure-white);box-shadow:var(--clay-shadow);transform:translateX(calc(var(--i) * 34px)) translateY(calc(var(--i) * 10px));
   transition:transform var(--motion-base) var(--ease-enter)}
 .stack span::before{content:"";position:absolute;left:12px;right:12px;top:12px;height:10px;border-radius:var(--radius-pill);background:var(--oat-light)}
@@ -155,15 +155,15 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .card:hover .stack span{transform:translateX(calc(var(--i) * 86px)) translateY(calc(var(--i) * -4px)) rotate(calc(var(--i) * 5deg - 5deg))}
 .card-body{display:grid;gap:12px;padding:0 14px 16px}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
-.badges li{padding:4px 10px;border:1px dashed var(--oat-border);border-radius:var(--radius-pill);background:var(--warm-cream);
+.badges li{padding:4px 10px;border:0;border-radius:var(--radius-pill);background:var(--oat-light);
   font-size:.72rem;font-weight:600;letter-spacing:1.08px;text-transform:uppercase;line-height:1.2;color:var(--ink-soft)}
 .card h3{font-family:var(--f-display);font-weight:400;font-size:clamp(1.6rem,2.4vw,2rem);letter-spacing:0;line-height:1.1}
 .card p{margin:0;max-width:60ch;color:var(--ink-soft);font-size:1rem;line-height:1.6}
-.cta{justify-self:start;display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:8px 16px;border:1px solid var(--clay-black);border-radius:var(--radius-pill);
-  background:var(--pure-white);color:var(--ink);font-size:1rem;font-weight:500;letter-spacing:-.16px;line-height:1.5;
+.cta{justify-self:start;display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:8px 16px;border:0;border-radius:var(--radius-pill);
+  background:var(--oat-light);color:var(--ink);font-size:1rem;font-weight:500;letter-spacing:-.16px;line-height:1.5;
   transition:transform var(--motion-base) var(--ease-enter),background-color var(--motion-fast) linear,color var(--motion-fast) linear,box-shadow var(--motion-base) var(--ease-enter)}
 .cta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.card:hover .cta,.card:focus-visible .cta{background:var(--sw);color:var(--sw-ink);box-shadow:var(--hover-hard)}
+.card:hover .cta,.card:focus-visible .cta{background:var(--sw);color:var(--sw-ink)}
 .card.sw-blueberry{--sw:var(--p-accent);--sw-ink:var(--p-light)}
 .card.sw-pomegranate{--sw:var(--p-tan)}
 .card.sw-matcha{--sw:var(--p-tan)}
