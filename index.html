@@ -6,9 +6,12 @@
 <title>Sharon Tieu Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
 <style>
 /* Layout: a dotted journal page. Vertical dock pinned to the window's left edge, NYC clock in the bottom-left corner; content column: two-up project cards, playground; About view holds the bio + latest log. */
+/* Plus Jakarta Sans (fonts/, SIL OFL): one variable WOFF2 per character set, weights 400–700 */
+@font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin-ext.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* Brunswick Grotesque (fonts/): one Regular weight; its mixed-width texture comes from contextual alternates */
 @font-face{font-family:"Brunswick Grotesque";src:url("fonts/BrunswickGrotesque-Regular.otf") format("opentype");font-weight:400;font-style:normal;font-display:swap}
 :root{
@@ -49,9 +52,6 @@ body{
   color:var(--ink);font:400 1rem/1.55 var(--f-body);
   background-color:var(--paper);
 }
-/* dot grid (20px, 1px dots) pinned to the viewport; content scrolls over it */
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:20px 20px}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--focus-blue);outline-offset:3px;border-radius:4px}
 .mono{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
@@ -64,7 +64,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .rail .fdock,.rail .clock{position:fixed;z-index:50;left:calc(16px + env(safe-area-inset-left,0px))}
 .rail .fdock{top:calc(24px + env(safe-area-inset-top,0px))}
 .rail .clock{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
-.fdock-panel,.clock{border-radius:var(--radius-feature);border:1px solid var(--oat-border);
+.fdock-panel{border-radius:var(--radius-feature);border:1px solid var(--oat-border);
   background:var(--pure-white);box-shadow:var(--clay-shadow)}
 .fdock-panel{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:12px}
 .fdock a{--s:1;position:relative;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;color:var(--ink-soft);text-decoration:none;
@@ -84,7 +84,11 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
   .fdock a:hover + a + a,.fdock a:has(+ a + a:hover){--s:1.1}
 }
 @media (hover:none){.fdock a.on .tip{display:block}}
-.clock{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:74px;padding:10px 12px;color:var(--ink-soft)}
+.clock{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:6px 4px;color:var(--ink-soft)}
+.clock .loc{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.clock .loc svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.clock .time{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
+.clock .tz{font-size:.62rem}
 .clock b{font-family:var(--f-mono);font-weight:400;font-size:.9rem;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* main */
@@ -278,7 +282,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   .fdock a.on::after{left:50%;top:auto;bottom:-4px;margin:0 0 0 -2px}
   .fdock .tip{left:50%;top:100%;margin:12px 0 0;transform:translateX(-50%)}
   .fdock .tip::after{right:auto;left:50%;top:auto;bottom:100%;margin:0 0 0 -4px;border-right-color:transparent;border-bottom-color:var(--ink)}
-  .clock{flex-direction:row;gap:10px;padding:0 18px}
+  .clock{flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;padding:0 12px;border-radius:var(--radius-feature);background:var(--warm-cream)}
   main > section{scroll-margin-top:110px}
   .play{grid-template-columns:1fr}
   .log li{grid-template-columns:1fr;gap:2px}
@@ -293,7 +297,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <div class="rail">
-  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono">New York</span><b id="clock">--:--:--</b></div>
+  <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York</span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
   <nav class="fdock" aria-label="Sections">
     <div class="fdock-panel">
       <a href="#work" class="on" aria-label="My work"><span class="tip" aria-hidden="true">My work</span>
@@ -440,7 +444,9 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 <script>
 const clock=document.getElementById('clock');
 const fmt=new Intl.DateTimeFormat('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23',timeZone:'America/New_York'});
-function tick(){clock.textContent=fmt.format(new Date());}
+const tzEl=document.getElementById('clockTz');
+const tzFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'short'});
+function tick(){const now=new Date();clock.textContent=fmt.format(now);tzEl.textContent=(tzFmt.formatToParts(now).find(x=>x.type==='timeZoneName')||{}).value||'EST';}
 tick(); setInterval(tick,1000);
 
 // highlight the nav item for the section in view
