@@ -31,8 +31,8 @@
   --ease-enter:cubic-bezier(.34,1.12,.64,1); --ease-exit:cubic-bezier(.7,0,.84,0); --motion-fast:150ms; --motion-base:240ms;
 
   /* the site's own names, mapped onto Clay */
-  --paper:var(--warm-cream); --dot:var(--oat-border); --card:var(--warm-cream); --card-in:var(--pure-white);
-  --ink:var(--clay-black); --ink-soft:var(--dark-charcoal); --ink-faint:var(--warm-charcoal); --rule:var(--oat-border);
+  --paper:#f4ecc2;   /* page background (Sharon's pick); Clay's warm-cream stays for badges and tiles */ --dot:var(--oat-border); --card:var(--warm-cream); --card-in:var(--pure-white);
+  --ink:#231815;   /* text colour (Sharon's pick): a warm near-black; Clay black stays for the dock tile and hard shadows */ --ink-soft:var(--dark-charcoal); --ink-faint:var(--warm-charcoal); --rule:var(--oat-border);
   --win-bar-hi:var(--pure-white); --win-bar-lo:var(--warm-cream); --win-dot:var(--oat-border);
   --log:var(--matcha-800); --log-ink:var(--pure-white); --log-soft:var(--matcha-300);
   --c1:var(--pomegranate-400); --c2:var(--slushie-800); --c3:var(--lemon-500); --c4:var(--matcha-600);
@@ -94,7 +94,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .clock .prev{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
   opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;
   transition:opacity var(--motion-fast) var(--ease-exit),transform var(--motion-fast) var(--ease-exit),visibility 0s linear var(--motion-fast);gap:4px;min-width:118px;padding:10px 12px;
-  background:var(--pure-white);border:1px solid var(--oat-border);border-radius:var(--radius-card);box-shadow:var(--clay-shadow);color:var(--clay-black);text-align:left}
+  background:var(--pure-white);border:1px solid var(--oat-border);border-radius:var(--radius-card);box-shadow:var(--clay-shadow);color:var(--ink);text-align:left}
 .clock .prev-h{font-size:.58rem;color:var(--warm-charcoal)}
 .clock .loc:hover .prev,.clock .loc:focus .prev,.clock .loc:focus-within .prev{opacity:1;visibility:visible;transform:none;
   transition:opacity var(--motion-base) var(--ease-enter),transform var(--motion-base) var(--ease-enter),visibility 0s}
@@ -129,31 +129,43 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 /* the name in Brunswick Grotesque, then one modest line in Plus Jakarta Sans (regular) */
 .intro h1{display:grid;gap:10px}
 .intro .name{font-family:"Brunswick Grotesque",var(--f-body);font-weight:400;font-size:clamp(2.5rem,5vw,3.5rem);line-height:1}
-.intro .role{font-family:var(--f-body);font-weight:400;font-size:1.25rem;line-height:1.4;letter-spacing:normal;color:var(--clay-black)}
+.intro .role{font-family:var(--f-body);font-weight:400;font-size:1.25rem;line-height:1.4;letter-spacing:normal;color:var(--ink)}
 .intro em{font-style:normal;color:var(--blueberry-800)}
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
 .sec-head h2{font-family:var(--f-mono);font-weight:700;font-size:clamp(1.05rem,1.6vw,1.3rem);letter-spacing:.1em;text-transform:uppercase}
 .sec-head .mono{color:var(--ink-faint)}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.8vw,22px)}
-/* project cards: title + arrow, a stack of three tiles that fans out on hover, stats, description */
-.card{display:flex;flex-direction:column;gap:20px;min-width:0;padding:24px;border:1px solid var(--oat-border);border-radius:var(--radius-feature);background:var(--pure-white);color:var(--ink);
-  text-decoration:none;box-shadow:var(--clay-shadow);transition:transform var(--motion-base) var(--ease-enter),box-shadow var(--motion-base) var(--ease-enter)}
-.card:hover{transform:translateY(-6px) rotate(-1.5deg);box-shadow:var(--hover-hard)}
-.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.card h3{font-family:var(--f-display);font-weight:400;font-size:clamp(1.6rem,2.4vw,2rem);letter-spacing:0;line-height:1.1}
-.card-arrow{flex:none;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s ease-in-out}
-.card:hover .card-arrow{transform:translateX(4px)}
-.stack{position:relative;height:128px}
-.stack span{position:absolute;top:0;left:0;z-index:calc(3 - var(--i));width:40%;height:100%;border:3px solid var(--pure-white);border-radius:var(--radius-card);
-  box-shadow:0 6px 14px -6px rgba(40,32,20,.35);transform:translateX(calc(var(--i) * 32px));transition:transform .3s ease-in-out}
-.card:hover .stack span{transform:translateX(calc(var(--i) * 80px)) rotate(calc(var(--i) * 5deg - 5deg))}
-/* featured card: same size as the others, but alone in the first row (the next card starts row 2) */
+/* project cards (Clay): a swatch panel framing placeholder screens, uppercase pill badges, title, copy,
+   and a pill CTA that fills with the card's swatch and casts the hard offset shadow on hover */
+.card{--sw:var(--matcha-300);--sw-ink:var(--ink);display:flex;flex-direction:column;gap:18px;min-width:0;padding:6px;
+  border:1px solid var(--oat-border);border-radius:18px;background:var(--pure-white);color:var(--ink);text-decoration:none;
+  box-shadow:var(--clay-shadow);transition:transform var(--motion-base) var(--ease-enter),box-shadow var(--motion-base) var(--ease-enter)}
+.card:hover{transform:translateY(-4px)}
 .card.feature + .card{grid-column-start:1}
-.card-stats{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:0;list-style:none;font-size:.85rem;color:var(--ink-soft)}
-.card-stats li{display:flex;align-items:center;gap:6px}
-.card-stats svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.card p{margin:-8px 0 0;color:var(--ink-soft);font-size:.9rem;line-height:1.6}
+.card-panel{position:relative;height:clamp(190px,18vw,230px);overflow:hidden;border-radius:var(--radius-card);background:var(--sw)}
+.stack{position:absolute;left:28px;right:28px;bottom:-22px;height:150px}
+.stack span{position:absolute;bottom:0;left:0;z-index:calc(3 - var(--i));width:min(44%,220px);height:100%;border:1px solid var(--oat-border);border-radius:var(--radius-card);
+  background:var(--pure-white);box-shadow:var(--clay-shadow);transform:translateX(calc(var(--i) * 34px)) translateY(calc(var(--i) * 10px));
+  transition:transform var(--motion-base) var(--ease-enter)}
+.stack span::before{content:"";position:absolute;left:12px;right:12px;top:12px;height:10px;border-radius:var(--radius-pill);background:var(--oat-light)}
+.stack span::after{content:"";position:absolute;left:12px;width:55%;top:30px;height:8px;border-radius:var(--radius-pill);background:var(--oat-light)}
+.card:hover .stack span{transform:translateX(calc(var(--i) * 86px)) translateY(calc(var(--i) * -4px)) rotate(calc(var(--i) * 5deg - 5deg))}
+.card-body{display:grid;gap:12px;padding:0 14px 16px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.badges li{padding:4px 10px;border:1px dashed var(--oat-border);border-radius:var(--radius-pill);background:var(--warm-cream);
+  font-size:.72rem;font-weight:600;letter-spacing:1.08px;text-transform:uppercase;line-height:1.2;color:var(--dark-charcoal)}
+.card h3{font-family:var(--f-display);font-weight:400;font-size:clamp(1.6rem,2.4vw,2rem);letter-spacing:0;line-height:1.1}
+.card p{margin:0;max-width:60ch;color:var(--dark-charcoal);font-size:1rem;line-height:1.6}
+.cta{justify-self:start;display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:8px 16px;border:1px solid var(--clay-black);border-radius:var(--radius-pill);
+  background:var(--pure-white);color:var(--ink);font-size:1rem;font-weight:500;letter-spacing:-.16px;line-height:1.5;
+  transition:transform var(--motion-base) var(--ease-enter),background-color var(--motion-fast) linear,color var(--motion-fast) linear,box-shadow var(--motion-base) var(--ease-enter)}
+.cta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card:hover .cta,.card:focus-visible .cta{background:var(--sw);color:var(--sw-ink);box-shadow:var(--hover-hard)}
+.card.sw-blueberry{--sw:var(--blueberry-800);--sw-ink:var(--pure-white)}
+.card.sw-pomegranate{--sw:var(--pomegranate-400)}
+.card.sw-matcha{--sw:var(--matcha-300)}
+.card.sw-lemon{--sw:var(--lemon-500)}
 
 
 /* ---------- About me: intro card with photos, quick facts, three core values (Clay) ---------- */
@@ -170,7 +182,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .ab-pic.cats{background:var(--lemon-400);transform:rotate(3deg)}
 .ab-pic:hover{transform:rotate(0deg) translateY(-6px);box-shadow:var(--hover-hard)}
 .ab-pic figcaption{position:absolute;left:12px;bottom:12px;padding:4px 12px;border-radius:var(--radius-pill);background:var(--pure-white);
-  font-size:.8rem;font-weight:600;color:var(--clay-black)}
+  font-size:.8rem;font-weight:600;color:var(--ink)}
 .ab-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0}
 .ab-facts div{padding:16px 18px;border:1px dashed var(--oat-border);border-radius:var(--radius-card);background:var(--warm-cream)}
 .ab-facts dt{font-family:var(--f-mono);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--warm-charcoal)}
@@ -187,8 +199,8 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .value h4{margin:0;font-family:var(--f-display);font-weight:400;font-synthesis:none;font-size:1.6rem;line-height:1.1}
 .value p{margin:0;font-size:1rem;line-height:1.6}
 .value.v-ube{background:var(--ube-800);color:var(--pure-white)}
-.value.v-white{background:var(--pure-white);color:var(--clay-black);border:1px solid var(--oat-border);box-shadow:var(--clay-shadow)}
-.value.v-lemon{background:var(--lemon-500);color:var(--clay-black)}
+.value.v-white{background:var(--pure-white);color:var(--ink);border:1px solid var(--oat-border);box-shadow:var(--clay-shadow)}
+.value.v-lemon{background:var(--lemon-500);color:var(--ink)}
 .value.v-white p{color:var(--dark-charcoal)}
 @media (max-width:980px){
   .ab-intro{grid-template-columns:1fr}
@@ -329,36 +341,48 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   <section id="work" aria-label="My work" style="display:grid;gap:22px">
     <div class="grid">
 
-      <a class="card feature" href="market-monitor.html" aria-label="Read the Capital Markets - Market Monitor case study">
-        <div class="card-head"><h3>Capital Markets - Market Monitor</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
-        <div class="stack" aria-hidden="true"><span style="--i:0;background:var(--blueberry-800)"></span><span style="--i:1;background:var(--slushie-500)"></span><span style="--i:2;background:var(--ube-300)"></span></div>
-        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>JPMorgan</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Consumer &amp; Investment Banking</li></ul>
-        <p>Building solutions for investment bankers to help them discover more new features and building a helpful in-app platform to help the JPMorgan Global Digital Products team manage communications.</p>
+      <a class="card feature sw-blueberry" href="market-monitor.html" aria-label="Read the Capital Markets - Market Monitor case study">
+        <!-- ✎ swap the placeholder screens for screenshots of the project when you have them -->
+        <div class="card-panel" aria-hidden="true"><div class="stack"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span></div></div>
+        <div class="card-body">
+          <ul class="badges"><li>JPMorgan</li><li>Consumer &amp; Investment Banking</li></ul>
+          <h3>Capital Markets - Market Monitor</h3>
+          <p>Building solutions for investment bankers to help them discover more new features and building a helpful in-app platform to help the JPMorgan Global Digital Products team manage communications.</p>
+          <span class="cta">View case study<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </div>
       </a>
 
-      <a class="card" href="#work" aria-label="Learn more about SENSE">
-        <div class="card-head"><h3>SENSE</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
-        <div class="stack" aria-hidden="true"><span style="--i:0;background:var(--pomegranate-400)"></span><span style="--i:1;background:var(--lemon-400)"></span><span style="--i:2;background:var(--ube-300)"></span></div>
-        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Health tech</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
-        <p>A women's health and fitness app that adapts training to the body instead of a generic plan.</p>
+      <a class="card sw-pomegranate" href="#work" aria-label="Learn more about SENSE">
+        <!-- ✎ swap the placeholder screens for screenshots of the project when you have them -->
+        <div class="card-panel" aria-hidden="true"><div class="stack"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span></div></div>
+        <div class="card-body">
+          <ul class="badges"><li>Designlab</li><li>Health tech</li><li>Case study</li></ul>
+          <h3>SENSE</h3>
+          <p>A women's health and fitness app that adapts training to the body instead of a generic plan.</p>
+          <span class="cta">Case study coming soon<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </div>
       </a>
 
-      <a class="card" href="#work" aria-label="Learn more about Roomster">
-        <div class="card-head"><h3>Roomster</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
-        <div class="stack" aria-hidden="true"><span style="--i:0;background:var(--matcha-300)"></span><span style="--i:1;background:var(--slushie-500)"></span><span style="--i:2;background:var(--lemon-500)"></span></div>
-        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>Social</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
-        <p>A roommate matching redesign built around trust: what people need to see before they share a lease.</p>
+      <a class="card sw-matcha" href="#work" aria-label="Learn more about Roomster">
+        <!-- ✎ swap the placeholder screens for screenshots of the project when you have them -->
+        <div class="card-panel" aria-hidden="true"><div class="stack"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span></div></div>
+        <div class="card-body">
+          <ul class="badges"><li>Designlab</li><li>Social</li><li>Case study</li></ul>
+          <h3>Roomster</h3>
+          <p>A roommate matching redesign built around trust: what people need to see before they share a lease.</p>
+          <span class="cta">Case study coming soon<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </div>
       </a>
 
-      <a class="card" href="#work" aria-label="Learn more about Mando">
-        <div class="card-head"><h3>Mando</h3><svg class="card-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-        <!-- ✎ swap these gradient tiles for screenshots of the project when you have them -->
-        <div class="stack" aria-hidden="true"><span style="--i:0;background:var(--lemon-500)"></span><span style="--i:1;background:var(--pomegranate-400)"></span><span style="--i:2;background:var(--matcha-300)"></span></div>
-        <ul class="card-stats"><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg>Designlab</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5"/></svg>EdTech</li><li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Case study</li></ul>
-        <p>Mandarin learning built around tones and characters, for learners who stall after the basics.</p>
+      <a class="card sw-lemon" href="#work" aria-label="Learn more about Mando">
+        <!-- ✎ swap the placeholder screens for screenshots of the project when you have them -->
+        <div class="card-panel" aria-hidden="true"><div class="stack"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span></div></div>
+        <div class="card-body">
+          <ul class="badges"><li>Designlab</li><li>EdTech</li><li>Case study</li></ul>
+          <h3>Mando</h3>
+          <p>Mandarin learning built around tones and characters, for learners who stall after the basics.</p>
+          <span class="cta">Case study coming soon<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </div>
       </a>
 
     </div>
