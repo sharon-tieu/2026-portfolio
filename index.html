@@ -536,9 +536,21 @@ customElements.whenDefined('model-viewer').then(()=>{
     aboutView.hidden=!onAbout;
     homeParts.forEach(el=>el.hidden=onAbout);
     navLinks.forEach(l=>{const on=l.getAttribute('href')==='#'+(onAbout?'about':(id||'work'));l.classList.toggle('on',on);on?l.setAttribute('aria-current','page'):l.removeAttribute('aria-current');});
-    if(onAbout||!id){window.scrollTo(0,0);}
-    else{const t=document.getElementById(id); if(t) requestAnimationFrame(()=>t.scrollIntoView());}
+    // glide to the section on a nav click; jump on first load, and for anyone who prefers reduced motion
+    const behavior=first||matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+    first=false;
+    if(onAbout){window.scrollTo({top:0,behavior:'auto'});}          // a different view: start at its top
+    else if(!id){window.scrollTo({top:0,behavior});}
+    else{const t=document.getElementById(id); if(t) requestAnimationFrame(()=>t.scrollIntoView({behavior,block:'start'}));}
   }
+  let first=true;
+  // dock clicks: stop the browser's instant jump to the anchor, record the hash, then glide there ourselves
+  navLinks.forEach(l=>l.addEventListener('click',e=>{
+    e.preventDefault();
+    const href=l.getAttribute('href');
+    if(href!==location.hash) history.pushState(null,'',href);
+    route();
+  }));
   addEventListener('hashchange',route); route();
 })();
 </script>
