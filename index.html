@@ -131,7 +131,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) calc(130px + env(safe-are
   min-height:calc(100vh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px));min-height:calc(100svh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px))}
 .intro-text{display:grid;min-width:0;text-align:right}
 /* the blinking chibi beside the name (transparent cut-out; a still image for reduced motion) */
-.chibi{display:block;width:auto;height:clamp(150px,20vw,280px);margin:0 0 -24px}   /* sits a little below the text's baseline */
+.chibi{display:block;width:auto;height:clamp(165px,22vw,308px);margin:0 0 -24px}   /* sits a little below the text's baseline */
 .chibi img{display:block;width:auto;height:100%}
 .chibi{transform-origin:50% 100%}
 /* landing sequence (first load only; the .play-in class is removed once it finishes):
@@ -330,7 +330,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   .play{grid-template-columns:1fr}
   .log li{grid-template-columns:1fr;gap:2px}
 }
-@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .chibi{height:132px} }
+@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .chibi{height:145px} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 <!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
@@ -345,9 +345,9 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
       <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
       <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
     </div>
-    <picture class="chibi" role="button" tabindex="0" aria-label="Make Sharon's chibi yawn">
+    <picture class="chibi" role="button" tabindex="0" aria-label="Play with Sharon's chibi">
       <source srcset="assets/sharon-still.webp" media="(prefers-reduced-motion: reduce)">
-      <img src="assets/sharon-blink.webp" width="419" height="560" alt="Pixel-art chibi of Sharon, blinking">
+      <img src="assets/sharon-blink.webp" width="419" height="617" alt="Pixel-art chibi of Sharon, blinking">
     </picture>
   </header>
   <div class="rail">
@@ -560,22 +560,28 @@ customElements.whenDefined('model-viewer').then(()=>{
   setTimeout(done,3200);   // fallback: reduced motion, or the page opened straight onto About
 })();
 
-/* ---------- click the chibi to make her yawn (plays once; extra clicks mid-yawn are ignored) ---------- */
+/* ---------- click the chibi: she takes turns yawning and doing her cat face
+   (each plays once; extra clicks while one is playing are ignored) ---------- */
 (function(){
   const chibi=document.querySelector('#intro .chibi'), img=chibi&&chibi.querySelector('img');
   if(!img) return;
-  const BLINK=img.getAttribute('src'), YAWN_MS=2300;   // sharon-yawn.webp: yawn 700 + bubble 1100 + yawn 300 + open 200
-  let yawnBlob=null, yawning=false;
-  fetch('assets/sharon-yawn.webp').then(r=>r.ok?r.blob():null).then(b=>{yawnBlob=b;}).catch(()=>{});
-  const yawn=()=>{
-    if(yawning||!yawnBlob||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    yawning=true;
-    const url=URL.createObjectURL(yawnBlob);   // a fresh URL each time so the animation always starts from the first frame
+  const BLINK=img.getAttribute('src');
+  const moves=[
+    {src:'assets/sharon-yawn.webp',ms:2300},   // yawn 700 + bubble 1100 + yawn 300 + open 200
+    {src:'assets/sharon-cat.webp', ms:3200}    // happy 900 + smug 1100 + sparkle 1000 + open 200
+  ];
+  moves.forEach(m=>fetch(m.src).then(r=>r.ok?r.blob():null).then(b=>{m.blob=b;}).catch(()=>{}));
+  let next=0, busy=false;
+  const play=()=>{
+    const m=moves[next];
+    if(busy||!m.blob||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    busy=true; next=(next+1)%moves.length;
+    const url=URL.createObjectURL(m.blob);   // a fresh URL each time so the animation always starts from the first frame
     img.src=url;
-    setTimeout(()=>{ img.src=BLINK; URL.revokeObjectURL(url); yawning=false; },YAWN_MS);
+    setTimeout(()=>{ img.src=BLINK; URL.revokeObjectURL(url); busy=false; },m.ms);
   };
-  chibi.addEventListener('click',yawn);
-  chibi.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); yawn(); } });
+  chibi.addEventListener('click',play);
+  chibi.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); play(); } });
 })();
 
 /* ---------- one-file navigation: About is a separate view ---------- */
