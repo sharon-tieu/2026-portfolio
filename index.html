@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
 <style>
-/* Layout: a dotted journal page. Header with New York time, then a sticky horizontal dock; content column: two-up project cards, playground; About view holds the bio + latest log. */
+/* Layout: a dotted journal page. Header with New York time; dock fixed at the bottom centre; content column: two-up project cards, playground; About view holds the bio + latest log. */
 /* Plus Jakarta Sans (fonts/, SIL OFL): one variable WOFF2 per character set, weights 400–700 */
 @font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin-ext.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:"Plus Jakarta Sans";src:url("fonts/PlusJakartaSans-latin.woff2") format("woff2");font-weight:400 700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
@@ -65,18 +65,19 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 
 .shell{max-width:1400px;margin:0 auto;min-height:100vh}
 
-/* nav: a horizontal dock under the header, sticky at the top while scrolling; the hovered icon and its neighbours scale up */
-.rail{position:sticky;z-index:50;top:calc(16px + env(safe-area-inset-top,0px));align-self:flex-start}
+/* nav: a horizontal dock fixed to the bottom centre of the window; the hovered icon and its neighbours scale up */
+.rail{display:contents}   /* its spot in the page flow stays empty: the dock itself is fixed */
+.rail .fdock{position:fixed;z-index:50;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%)}
 .fdock-panel{border-radius:var(--radius-feature);border:1px solid var(--oat-border);
   background:var(--pure-white);box-shadow:var(--clay-shadow)}
 .fdock-panel{display:flex;flex-direction:row;align-items:flex-start;gap:8px;padding:12px}
 .fdock a{--s:1;position:relative;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;color:var(--ink-soft);text-decoration:none;
-  transform:scale(var(--s));transform-origin:top;transition:transform .3s ease-out,background-color .3s ease-out,color .2s}
+  transform:scale(var(--s));transform-origin:bottom;transition:transform .3s ease-out,background-color .3s ease-out,color .2s}
 .fdock svg{width:20px;height:20px}
 .fdock a.on{background:var(--p-accent);color:var(--p-light)}
 .fdock a.on::after{content:"";position:absolute;left:50%;bottom:-4px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--p-accent)}
-.fdock .tip{position:absolute;left:50%;top:100%;margin-top:12px;transform:translateX(-50%);display:none;padding:6px 12px;border-radius:8px;white-space:nowrap;font-size:.75rem;line-height:1.2;background:var(--ink);color:var(--paper)}
-.fdock .tip::after{content:"";position:absolute;left:50%;bottom:100%;margin-left:-4px;border:4px solid transparent;border-bottom-color:var(--ink)}
+.fdock .tip{position:absolute;left:50%;bottom:100%;margin-bottom:12px;transform:translateX(-50%);display:none;padding:6px 12px;border-radius:8px;white-space:nowrap;font-size:.75rem;line-height:1.2;background:var(--ink);color:var(--paper)}
+.fdock .tip::after{content:"";position:absolute;left:50%;top:100%;margin-left:-4px;border:4px solid transparent;border-top-color:var(--ink)}
 .fdock a:focus-visible .tip{display:block}
 @media (hover:hover){
   .fdock a:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
@@ -88,7 +89,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 }
 @media (hover:none){.fdock a.on .tip{display:block}}
 .clock{display:flex;flex-direction:row;align-items:center;gap:12px;padding:0;color:var(--ink-soft)}
-.intro .clock{margin-top:16px}
+.intro .clock{margin-top:16px;justify-content:flex-end}
 .clock .loc{position:relative;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:var(--cursor-hot);border-radius:4px}
 /* hover / focus on New York: where Sharon lived before, stacked */
 .clock .prev{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
@@ -104,8 +105,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .clock b{font-family:var(--f-mono);font-weight:400;font-size:.9rem;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* main */
-main > section{scroll-margin-top:110px}   /* clear the sticky dock */
-main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
+main > section{scroll-margin-top:24px}
+main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) calc(130px + env(safe-area-inset-bottom,0px));min-width:0;display:flex;flex-direction:column;gap:clamp(28px,3vw,40px)}
 
 .log{background:var(--log);color:var(--log-ink);border-radius:var(--radius-feature);padding:22px 26px;font-family:var(--f-mono)}
 .log summary{list-style:none;cursor:var(--cursor-hot);display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -125,7 +126,34 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) 60px;min-width:0;display:
 .log li span:first-child{font-family:var(--f-mono);font-size:.78rem;padding-top:3px}
 
 /* home headline */
-.intro{padding:clamp(8px,2vw,24px) 0 clamp(4px,1vw,12px)}
+/* the intro fills the first screen on its own (minus main's top padding and the gap after it); work starts below the fold */
+.intro{padding:clamp(8px,2vw,24px) 0 clamp(4px,1vw,12px);display:grid;grid-template-columns:auto auto;justify-content:center;align-items:end;align-content:center;column-gap:clamp(16px,3vw,40px);
+  min-height:calc(100vh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px));min-height:calc(100svh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px))}
+.intro-text{display:grid;min-width:0;text-align:right}
+/* the blinking chibi beside the name (transparent cut-out; a still image for reduced motion) */
+.chibi{display:block;width:auto;height:clamp(150px,20vw,280px);margin:0}
+.chibi img{display:block;width:auto;height:100%}
+.chibi{transform-origin:50% 100%}
+/* landing sequence (first load only; the .play-in class is removed once it finishes):
+   the page starts empty, the intro text eases up line by line, then the chibi appears level with "Sharon",
+   drops to her spot, squashes and bounces twice. --drop-from is measured by script. */
+@media (prefers-reduced-motion:no-preference){
+  .intro.play-in .name,.intro.play-in .role,.intro.play-in .clock{animation:intro-in 900ms cubic-bezier(.22,.61,.36,1) both}
+  .intro.play-in .name{animation-delay:150ms}
+  .intro.play-in .role{animation-delay:320ms}
+  .intro.play-in .clock{animation-delay:490ms}
+  .intro.play-in .chibi{animation:chibi-drop 1600ms 1100ms both}
+}
+@keyframes intro-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes chibi-drop{
+  0%  {opacity:0;transform:translateY(var(--drop-from,-160px));animation-timing-function:linear}
+  6%  {opacity:1;transform:translateY(var(--drop-from,-160px));animation-timing-function:cubic-bezier(.55,0,1,.45)}   /* appears level with "Sharon", then falls, speeding up */
+  45% {transform:translateY(0) scale(1.08,.9);animation-timing-function:cubic-bezier(0,.55,.45,1)}   /* lands: squash */
+  62% {transform:translateY(-12%) scale(.98,1.03);animation-timing-function:cubic-bezier(.55,0,1,.45)}   /* first bounce */
+  76% {transform:translateY(0) scale(1.04,.96);animation-timing-function:cubic-bezier(0,.55,.45,1)}
+  87% {transform:translateY(-3%);animation-timing-function:cubic-bezier(.55,0,1,.45)}   /* small second bounce */
+  100%{transform:none}
+}
 /* the name in Brunswick Grotesque, then one modest line in Plus Jakarta Sans (regular) */
 .intro h1{display:grid;gap:10px}
 .intro .name{font-family:"Brunswick Grotesque",var(--f-body);font-weight:400;font-size:clamp(2.5rem,5vw,3.5rem);line-height:1}
@@ -302,7 +330,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   .play{grid-template-columns:1fr}
   .log li{grid-template-columns:1fr;gap:2px}
 }
-@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} }
+@media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .chibi{height:132px} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 <!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
@@ -312,9 +340,15 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
 <div class="shell">
 <main>
-  <header class="intro" id="intro">
-    <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
-    <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
+  <header class="intro play-in" id="intro">
+    <div class="intro-text">
+      <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
+      <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
+    </div>
+    <picture class="chibi">
+      <source srcset="assets/sharon-still.webp" media="(prefers-reduced-motion: reduce)">
+      <img src="assets/sharon-blink.webp" width="414" height="560" alt="Pixel-art chibi of Sharon, blinking">
+    </picture>
   </header>
   <div class="rail">
     <nav class="fdock" aria-label="Sections">
@@ -511,12 +545,28 @@ customElements.whenDefined('model-viewer').then(()=>{
   });
 });
 
+/* ---------- landing animation: run once, then drop the class so returning from About doesn't replay it ---------- */
+(function(){
+  const intro=document.getElementById('intro'), chibi=intro&&intro.querySelector('.chibi');
+  if(!intro) return;
+  const done=()=>intro.classList.remove('play-in');
+  // start the drop with her feet level with the top of "Sharon" (the chibi sits on the text block's baseline)
+  const name=intro.querySelector('.name'), text=intro.querySelector('.intro-text');
+  if(chibi&&name&&text) chibi.style.setProperty('--drop-from',Math.round(name.getBoundingClientRect().top-text.getBoundingClientRect().bottom)+'px');
+  if(chibi) chibi.addEventListener('animationend',done,{once:true});
+  setTimeout(done,3200);   // fallback: reduced motion, or the page opened straight onto About
+})();
+
 /* ---------- one-file navigation: About is a separate view ---------- */
 (function(){
   const homeParts=[...document.querySelectorAll('main > #intro, main > #work, main > #playground')];
   const aboutView=document.getElementById('about');
   const navLinks=[...document.querySelectorAll('.fdock a')];
   window.__onAbout=false;
+  // every visit opens on the intro: don't restore the last scroll position, and drop a leftover #work / #playground
+  // (About stays reachable by link because it is its own view)
+  if('scrollRestoration' in history) history.scrollRestoration='manual';
+  if(/^#(work|playground)$/.test(location.hash)) history.replaceState(null,'',location.pathname+location.search);
   function route(){
     const id=(location.hash||'').slice(1);
     const onAbout=id==='about';
