@@ -345,7 +345,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
       <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
       <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
     </div>
-    <picture class="chibi">
+    <picture class="chibi" role="button" tabindex="0" aria-label="Make Sharon's chibi yawn">
       <source srcset="assets/sharon-still.webp" media="(prefers-reduced-motion: reduce)">
       <img src="assets/sharon-blink.webp" width="419" height="560" alt="Pixel-art chibi of Sharon, blinking">
     </picture>
@@ -558,6 +558,24 @@ customElements.whenDefined('model-viewer').then(()=>{
   }
   if(chibi) chibi.addEventListener('animationend',done,{once:true});
   setTimeout(done,3200);   // fallback: reduced motion, or the page opened straight onto About
+})();
+
+/* ---------- click the chibi to make her yawn (plays once; extra clicks mid-yawn are ignored) ---------- */
+(function(){
+  const chibi=document.querySelector('#intro .chibi'), img=chibi&&chibi.querySelector('img');
+  if(!img) return;
+  const BLINK=img.getAttribute('src'), YAWN_MS=2300;   // sharon-yawn.webp: yawn 700 + bubble 1100 + yawn 300 + open 200
+  let yawnBlob=null, yawning=false;
+  fetch('assets/sharon-yawn.webp').then(r=>r.ok?r.blob():null).then(b=>{yawnBlob=b;}).catch(()=>{});
+  const yawn=()=>{
+    if(yawning||!yawnBlob||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    yawning=true;
+    const url=URL.createObjectURL(yawnBlob);   // a fresh URL each time so the animation always starts from the first frame
+    img.src=url;
+    setTimeout(()=>{ img.src=BLINK; URL.revokeObjectURL(url); yawning=false; },YAWN_MS);
+  };
+  chibi.addEventListener('click',yawn);
+  chibi.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); yawn(); } });
 })();
 
 /* ---------- one-file navigation: About is a separate view ---------- */
