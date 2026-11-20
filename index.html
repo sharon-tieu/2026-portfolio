@@ -131,18 +131,18 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) calc(130px + env(safe-are
   min-height:calc(100vh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px));min-height:calc(100svh - clamp(24px,3vw,46px) - clamp(28px,3vw,40px))}
 .intro-text{display:grid;min-width:0;text-align:right}
 /* the blinking chibi beside the name (transparent cut-out; a still image for reduced motion) */
-.chibi{display:block;width:auto;height:clamp(150px,20vw,280px);margin:0}
+.chibi{display:block;width:auto;height:clamp(150px,20vw,280px);margin:0 0 -24px}   /* sits a little below the text's baseline */
 .chibi img{display:block;width:auto;height:100%}
 .chibi{transform-origin:50% 100%}
 /* landing sequence (first load only; the .play-in class is removed once it finishes):
-   the page starts empty, the intro text eases up line by line, then the chibi appears level with "Sharon",
-   drops to her spot, squashes and bounces twice. --drop-from is measured by script. */
+   the page starts empty; the intro text eases up line by line while, at the same moment, the chibi appears level with "Sharon"
+   and drops to her spot, squashes and bounces twice. --drop-from is measured by script. */
 @media (prefers-reduced-motion:no-preference){
   .intro.play-in .name,.intro.play-in .role,.intro.play-in .clock{animation:intro-in 900ms cubic-bezier(.22,.61,.36,1) both}
   .intro.play-in .name{animation-delay:150ms}
   .intro.play-in .role{animation-delay:320ms}
   .intro.play-in .clock{animation-delay:490ms}
-  .intro.play-in .chibi{animation:chibi-drop 1600ms 1100ms both}
+  .intro.play-in .chibi{animation:chibi-drop 1600ms 150ms both}   /* starts with "Sharon" */
 }
 @keyframes intro-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 @keyframes chibi-drop{
@@ -347,7 +347,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
     </div>
     <picture class="chibi">
       <source srcset="assets/sharon-still.webp" media="(prefers-reduced-motion: reduce)">
-      <img src="assets/sharon-blink.webp" width="414" height="560" alt="Pixel-art chibi of Sharon, blinking">
+      <img src="assets/sharon-blink.webp" width="419" height="560" alt="Pixel-art chibi of Sharon, blinking">
     </picture>
   </header>
   <div class="rail">
@@ -552,7 +552,10 @@ customElements.whenDefined('model-viewer').then(()=>{
   const done=()=>intro.classList.remove('play-in');
   // start the drop with her feet level with the top of "Sharon" (the chibi sits on the text block's baseline)
   const name=intro.querySelector('.name'), text=intro.querySelector('.intro-text');
-  if(chibi&&name&&text) chibi.style.setProperty('--drop-from',Math.round(name.getBoundingClientRect().top-text.getBoundingClientRect().bottom)+'px');
+  if(chibi&&name&&text){
+    const restBottom=text.getBoundingClientRect().bottom-parseFloat(getComputedStyle(chibi).marginBottom||0);   // her resting feet (she sits lower via a negative margin)
+    chibi.style.setProperty('--drop-from',Math.round(name.getBoundingClientRect().top-restBottom)+'px');
+  }
   if(chibi) chibi.addEventListener('animationend',done,{once:true});
   setTimeout(done,3200);   // fallback: reduced motion, or the page opened straight onto About
 })();
