@@ -43,7 +43,7 @@ body.checking .gate{visibility:hidden}
 <script>
 (async function(){
   const form=document.getElementById('gate'), pw=document.getElementById('pw'), err=document.getElementById('err'), btn=form.querySelector('button');
-  const html=await MMLock.fromSession();          // already unlocked from the home page in this tab
+  const html=await MMLock.takeHandoff();          // just unlocked in the home page pop-up (works once)
   if(html){ MMLock.show(html); return; }
   document.body.classList.remove('checking'); pw.focus();
   form.addEventListener('submit',async e=>{

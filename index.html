@@ -661,7 +661,6 @@ customElements.whenDefined('model-viewer').then(()=>{
   let target='market-monitor.html';
   document.querySelectorAll('a[data-locked]').forEach(a=>a.addEventListener('click',async e=>{
     e.preventDefault(); target=a.getAttribute('href');
-    if(await MMLock.fromSession()){ location.href=target; return; }   // already unlocked in this tab
     err.textContent=''; pw.value=''; btn.disabled=false; btn.textContent='Unlock';
     dlg.showModal(); pw.focus();
   }));
@@ -669,7 +668,7 @@ customElements.whenDefined('model-viewer').then(()=>{
   dlg.addEventListener('click',e=>{ if(e.target===dlg) dlg.close(); });   // click outside the box
   form.addEventListener('submit',async e=>{
     e.preventDefault(); err.textContent=''; btn.disabled=true; btn.textContent='Unlocking…';
-    try{ await MMLock.unlock(pw.value); location.href=target; }
+    try{ await MMLock.unlock(pw.value,true); pw.value=''; location.href=target; }
     catch(x){
       err.textContent=x.code==='missing'?'This case study hasn\'t been locked yet.':'That password isn\'t right. Try again.';
       btn.disabled=false; btn.textContent='Unlock'; pw.select();
