@@ -332,6 +332,26 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 }
 @media (max-width:420px){ .fdock-panel{padding:8px;gap:4px} .fdock a{width:44px;height:44px} .chibi{height:145px} }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* password pop-up for the locked case study */
+.lock-dlg{width:min(calc(100% - 32px),400px);padding:32px;border:1px solid var(--p-tan);border-radius:var(--radius-feature);background:var(--p-light);color:var(--ink)}
+.lock-dlg::backdrop{background:color-mix(in srgb,var(--p-text) 35%,transparent)}
+.lock-dlg[open]{animation:lock-in var(--motion-base) var(--ease-enter)}
+@keyframes lock-in{from{opacity:0;transform:translateY(8px) scale(.98)}}
+.lock-dlg .x{position:absolute;top:14px;right:14px;width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:50%;background:none;color:inherit;cursor:var(--cursor-hot)}
+.lock-dlg .x:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.lock-dlg .x svg{width:18px;height:18px}
+.lock-dlg .ico{width:28px;height:28px;color:var(--p-accent)}
+.lock-dlg h2{margin:12px 0 4px;font:400 1.75rem/1.15 var(--f-display);letter-spacing:-.01em}
+.lock-dlg p{margin:0 0 20px}
+.lock-dlg label{display:block;margin-bottom:6px;font-weight:600;font-size:.9rem}
+.lock-dlg input{width:100%;padding:12px 14px;border:1px solid var(--p-tan);border-radius:var(--radius-card);background:#fff;font:inherit;color:inherit}
+.lock-dlg input:focus-visible{outline:2px solid var(--p-accent);outline-offset:1px}
+.lock-dlg .go{margin-top:12px;width:100%;padding:12px;border:0;border-radius:var(--radius-pill);background:var(--p-accent);color:var(--p-light);font:600 1rem var(--f-body);cursor:var(--cursor-hot)}
+.lock-dlg .go:disabled{opacity:.6;cursor:progress}
+.lock-dlg .err{min-height:1.4em;margin:10px 0 0;color:var(--p-accent);font-size:.9rem}
+.lock-dlg.shake{animation:lock-shake 320ms}
+@keyframes lock-shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.lock-dlg[open],.lock-dlg.shake{animation:none}}
 </style>
 <!-- model-viewer for the Playground 3D model (Draco-compressed .glb; its decoder loads automatically) -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.1/dist/model-viewer.min.js"></script>
@@ -365,7 +385,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   <section id="work" aria-label="My work" style="display:grid;gap:22px">
     <div class="grid">
 
-      <a class="card feature sw-blueberry" href="market-monitor.html" aria-label="Read the Capital Markets - Market Monitor case study">
+      <a class="card feature sw-blueberry" href="market-monitor.html" data-locked aria-haspopup="dialog" aria-label="Read the Capital Markets - Market Monitor case study (password protected)">
         <!-- ✎ swap the placeholder screens for screenshots of the project when you have them -->
         <div class="card-panel" aria-hidden="true"><div class="stack"><span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span></div></div>
         <div class="card-body">
@@ -495,6 +515,20 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
 
   <footer><span>© 2026 Sharon Tieu</span><span>Designed in New York, built with Claude</span></footer>
 </main>
+
+<dialog class="lock-dlg" id="lockDlg" aria-labelledby="lockTitle">
+  <form id="lockForm">
+    <button type="button" class="x" id="lockClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <h2 id="lockTitle">Protected case study</h2>
+    <p>This work is confidential. Enter the password to view it.</p>
+    <label for="lockPw">Password</label>
+    <input id="lockPw" type="password" autocomplete="current-password" required>
+    <button type="submit" class="go">Unlock</button>
+    <p class="err" id="lockErr" role="alert"></p>
+  </form>
+</dialog>
+<script src="assets/lock.js"></script>
 </div>
 
 <div class="cursor-bubble" id="dexBubble" aria-hidden="true">Pokedex: Sound is on. Adjust volume accordingly.</div>
@@ -617,6 +651,31 @@ customElements.whenDefined('model-viewer').then(()=>{
     route();
   }));
   addEventListener('hashchange',route); route();
+})();
+
+/* ---------- locked case study: ask for the password in a pop-up, then open it ---------- */
+(function(){
+  const dlg=document.getElementById('lockDlg'), form=document.getElementById('lockForm'), pw=document.getElementById('lockPw'),
+        err=document.getElementById('lockErr'), btn=form.querySelector('.go');
+  if(!dlg||!window.MMLock||typeof dlg.showModal!=='function') return;   // no pop-up support: the link's own page asks instead
+  let target='market-monitor.html';
+  document.querySelectorAll('a[data-locked]').forEach(a=>a.addEventListener('click',async e=>{
+    e.preventDefault(); target=a.getAttribute('href');
+    if(await MMLock.fromSession()){ location.href=target; return; }   // already unlocked in this tab
+    err.textContent=''; pw.value=''; btn.disabled=false; btn.textContent='Unlock';
+    dlg.showModal(); pw.focus();
+  }));
+  document.getElementById('lockClose').addEventListener('click',()=>dlg.close());
+  dlg.addEventListener('click',e=>{ if(e.target===dlg) dlg.close(); });   // click outside the box
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); err.textContent=''; btn.disabled=true; btn.textContent='Unlocking…';
+    try{ await MMLock.unlock(pw.value); location.href=target; }
+    catch(x){
+      err.textContent=x.code==='missing'?'This case study hasn\'t been locked yet.':'That password isn\'t right. Try again.';
+      btn.disabled=false; btn.textContent='Unlock'; pw.select();
+      dlg.classList.remove('shake'); void dlg.offsetWidth; dlg.classList.add('shake');
+    }
+  });
 })();
 </script>
 </body>
