@@ -114,16 +114,20 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .intro .clock{margin-top:16px;justify-content:flex-end}
 .clock .loc{position:relative;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:var(--cursor-hot);border-radius:4px}
 /* hover / focus on New York: where Sharon lived before, stacked */
-.clock .prev{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
+.clock .prev,.clock .diff{position:absolute;top:calc(100% + 8px);left:0;z-index:60;display:flex;flex-direction:column;
   opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;
   transition:opacity var(--motion-fast) var(--ease-exit),transform var(--motion-fast) var(--ease-exit),visibility 0s linear var(--motion-fast);gap:4px;min-width:118px;padding:10px 12px;
   background:var(--pure-white);border:1px solid var(--oat-border);border-radius:var(--radius-card);box-shadow:var(--clay-shadow);color:var(--ink);text-align:left}
 .clock .prev-h{font-size:.58rem;color:var(--ink-faint)}
-.clock .loc:hover .prev,.clock .loc:focus .prev,.clock .loc:focus-within .prev{opacity:1;visibility:visible;transform:none;
-  transition:opacity var(--motion-base) var(--ease-enter),transform var(--motion-base) var(--ease-enter),visibility 0s}
+.clock .loc:hover .prev,.clock .loc:focus .prev,.clock .loc:focus-within .prev,
+.clock .time:hover .diff,.clock .time:focus .diff{opacity:1;visibility:visible;transform:none;
+  transition:opacity var(--motion-base) var(--ease-enter) 200ms,transform var(--motion-base) var(--ease-enter) 200ms,visibility 0s 200ms}   /* appear after a 200ms hover */
 .clock .loc svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.clock .time{display:flex;align-items:baseline;gap:6px;white-space:nowrap}
+.clock .time{position:relative;display:flex;align-items:baseline;gap:6px;white-space:nowrap;cursor:var(--cursor-hot);border-radius:4px}
+/* hover / focus on the time: how far ahead of or behind the visitor New York is (from their device's time zone) */
+.clock .diff{left:auto;right:0;min-width:0;white-space:nowrap}
 .clock .tz{font-size:.62rem}
+.clock .sep{color:var(--ink-faint);opacity:.5}
 .clock b{font-family:var(--f-mono);font-weight:400;font-size:.9rem;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* main */
@@ -317,6 +321,7 @@ main{padding:clamp(24px,3vw,46px) clamp(16px,3vw,46px) calc(130px + env(safe-are
 .hover-shield{position:absolute;left:0;right:0;top:30px;bottom:0;z-index:5;cursor:var(--cursor-hot)}
 .cursor-bubble{position:fixed;left:0;top:0;z-index:60;pointer-events:none;font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;color:#f1efe9;background:rgba(38,38,40,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:9px 16px;border-radius:99px;opacity:0;transition:opacity .18s ease}
 .cursor-bubble.show{opacity:1}
+.cursor-bubble .caret{height:1em;vertical-align:-.12em;background:currentColor}
 footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:20px}
 
 @media (max-width:1100px){.play{grid-template-columns:1fr} .play > .demo:nth-child(3n+2){translate:none} .play:has(> .demo:nth-child(3n+2)){padding-bottom:0}}
@@ -365,7 +370,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   <header class="intro play-in" id="intro">
     <div class="intro-text">
       <h1><span class="name">Sharon</span><span class="role">UXUI Designer. Currently at <em>J.P.Morgan</em>.</span></h1>
-      <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="time"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span></span></div>
+      <div class="clock" role="timer" aria-label="Time in New York"><span class="mono loc" tabindex="0" aria-describedby="prevPlaces"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>New York<span class="prev" id="prevPlaces" role="tooltip"><span class="prev-h">Previously</span><span>California</span><span>Texas</span></span></span><span class="sep" aria-hidden="true">|</span><span class="time" tabindex="0" aria-describedby="clockDiff"><b id="clock">--:--:--</b><span class="mono tz" id="clockTz">EST</span><span class="mono diff" id="clockDiff" role="tooltip"><span class="prev-h">Time difference</span><span id="clockDiffTxt">Same time as you</span></span></span></div>
     </div>
     <picture class="chibi" role="button" tabindex="0" aria-label="Play with Sharon's chibi">
       <source srcset="assets/sharon-still.webp" media="(prefers-reduced-motion: reduce)">
@@ -514,6 +519,21 @@ const tzFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZon
 function tick(){const now=new Date();clock.textContent=fmt.format(now);tzEl.textContent=(tzFmt.formatToParts(now).find(x=>x.type==='timeZoneName')||{}).value||'EST';}
 tick(); setInterval(tick,1000);
 
+// "3 hours ahead of you": New York's UTC offset minus the visitor's (both from the browser, no location lookup)
+const diffTxt=document.getElementById('clockDiffTxt');
+function nyOffset(d){const p=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'}).formatToParts(d).map(x=>[x.type,x.value]));
+  return Math.round((Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute)-Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),d.getUTCHours(),d.getUTCMinutes()))/60000);}
+function showDiff(){
+  const d=new Date(), mins=nyOffset(d)+d.getTimezoneOffset();   // getTimezoneOffset is minus the visitor's offset
+  if(!mins){diffTxt.textContent='Same time as you';return;}
+  const a=Math.abs(mins), h=Math.floor(a/60), m=a%60;
+  const amt=[h&&`${h} hour${h>1?'s':''}`, m&&`${m} minutes`].filter(Boolean).join(' ');
+  diffTxt.textContent=`${amt} ${mins>0?'ahead of':'behind'} you`;
+}
+showDiff();
+document.querySelector('.clock .time').addEventListener('mouseenter',showDiff);
+document.querySelector('.clock .time').addEventListener('focus',showDiff);
+
 // highlight the nav item for the section in view (nothing is highlighted while the intro is in view)
 const links=[...document.querySelectorAll('.fdock a')];
 const io=new IntersectionObserver(es=>{
@@ -529,11 +549,24 @@ const io=new IntersectionObserver(es=>{
   if(!box||!shield||!bubble) return;
   if(matchMedia('(hover: none)').matches){ shield.hidden=true; return; }   // touch: no hover bubble, no extra tap
   const move=e=>{ bubble.style.transform=`translate(${e.clientX+16}px,${e.clientY+18}px)`; };
-  shield.addEventListener('pointerenter',e=>{ move(e); bubble.classList.add('show'); });
+  // typewriter: the message types itself out each time the bubble appears, with a blinking caret
+  const msg=bubble.textContent, still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  bubble.textContent='';
+  const typed=document.createElement('span'), caret=document.createElement('span');
+  caret.className='caret'; bubble.append(typed,caret);
+  let timer=0;
+  const type=()=>{
+    clearInterval(timer);
+    if(still){ typed.textContent=msg; return; }
+    let i=0; typed.textContent='';
+    timer=setInterval(()=>{ typed.textContent=msg.slice(0,++i); if(i>=msg.length) clearInterval(timer); },35);
+  };
+  const hide=()=>{ clearInterval(timer); bubble.classList.remove('show'); };
+  shield.addEventListener('pointerenter',e=>{ move(e); bubble.classList.add('show'); type(); });
   shield.addEventListener('pointermove',move);
-  shield.addEventListener('pointerleave',()=>bubble.classList.remove('show'));
+  shield.addEventListener('pointerleave',hide);
   shield.addEventListener('click',e=>{
-    bubble.classList.remove('show');
+    hide();
     shield.hidden=true;                                   // hand control to the Pokédex
     const under=document.elementFromPoint(e.clientX,e.clientY);
     if(under && under.tagName!=='IFRAME'){ under.focus?.(); under.click?.(); }
