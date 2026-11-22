@@ -2,7 +2,7 @@
 //
 // The readable case study lives OUTSIDE the website, in ~/repos/portfolio-private/market-monitor.html,
 // so it can never be uploaded or committed by accident. This script encrypts it with your password
-// (AES-256-GCM, key from PBKDF2-SHA-256 with 600,000 rounds) into assets/market-monitor.locked.json,
+// (AES-256-GCM, key from PBKDF2-SHA-256 with 600,000 rounds) into public/assets/market-monitor.locked.json,
 // which is the only copy the website ships. Without the password that file is unreadable.
 //
 // Run it from ~/repos/portfolio whenever you set/change the password or edit the case study:
@@ -13,7 +13,7 @@ import { webcrypto as crypto } from 'node:crypto';
 import readline from 'node:readline';
 
 const SRC = new URL('../../portfolio-private/market-monitor.html', import.meta.url);
-const OUT = new URL('../assets/market-monitor.locked.json', import.meta.url);
+const OUT = new URL('../public/assets/market-monitor.locked.json', import.meta.url);
 const ITER = 600000;
 
 function ask(question) {
@@ -47,4 +47,4 @@ const data = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encod
 
 const b64 = u => Buffer.from(u).toString('base64');
 await writeFile(OUT, JSON.stringify({ v: 1, iter: ITER, salt: b64(salt), iv: b64(iv), data: b64(new Uint8Array(data)) }));
-console.log('Locked. The website now uses assets/market-monitor.locked.json (safe to commit and publish).');
+console.log('Locked. The website now uses public/assets/market-monitor.locked.json (safe to commit and publish).');
