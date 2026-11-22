@@ -79,6 +79,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:400;font-synthesis:none;margin
 .fdock a{--s:1;position:relative;width:48px;height:48px;display:grid;place-items:center;border-radius:12px;color:var(--ink-soft);text-decoration:none;
   transform:scale(var(--s));transform-origin:bottom;transition:transform .3s ease-out,background-color .3s ease-out,color .2s}
 .fdock svg{width:20px;height:20px}
+.fdock .fdock-av{display:block;width:32px;height:32px;border-radius:6px;object-fit:cover}   /* About: Sharon's photo instead of an icon */
+.fdock a.on .fdock-av{box-shadow:0 0 0 2px var(--p-light)}
 .fdock a.on{background:var(--p-accent);color:var(--p-light)}
 .fdock a.on::after{content:"";position:absolute;left:50%;bottom:-4px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--p-accent)}
 .fdock .tip{position:absolute;left:50%;bottom:100%;margin-bottom:12px;transform:translateX(-50%);display:none;padding:6px 12px;border-radius:8px;white-space:nowrap;font-size:.75rem;line-height:1.2;background:var(--ink);color:var(--paper)}
@@ -360,7 +362,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
         <a href="#playground" aria-label="Playground"><span class="tip" aria-hidden="true">Playground</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg></a>
         <a href="#about" aria-label="About me"><span class="tip" aria-hidden="true">About me</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+          <img class="fdock-av" src="assets/avatar.webp" width="32" height="32" alt=""></a>
       </div>
     </nav>
   </div>
@@ -441,7 +443,7 @@ footer{color:var(--ink-faint);font-size:.85rem;display:flex;justify-content:spac
   <section id="about" class="view-about" hidden aria-label="About me" style="display:grid;gap:22px">
     <div class="ab-intro">
       <div class="ab-text">
-        <h3>Hi, I'm Sharon.</h3>
+        <h3>My Story</h3>
         <p>I started out writing documentation, which meant years of watching the gap between how software is built and how people try to use it. Design was the obvious next step: fix the screen so the manual gets shorter.</p>
         <p>I'm Chinese-American and moved to Manhattan for my role at JPMorgan Chase. Outside work I'm usually out with friends or finding a new spot somewhere in the city.</p>
       </div>
