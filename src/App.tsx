@@ -1,5 +1,9 @@
 import { useEffect, type CSSProperties, type ReactNode } from 'react'
 import { JournalLog } from '@/components/journal-log'
+import { ReadingList } from '@/components/reading-list'
+import { CatPaws } from '@/components/cat-paws'
+import { VinylPlayer } from '@/components/vinyl-player'
+import { IconHover3D } from '@/components/ui/icon-3d-hover'
 import { initSite } from '@/lib/site'
 
 const Arrow = () => (
@@ -154,14 +158,22 @@ export default function App() {
                 <p>I moved to Manhattan for my role at JPMorgan Chase.</p>
               </div>
               <div className="ab-pics">
+                {/* 3D icons, stacked on Sharon's left: pen and paper opens the Journal Log, books open the reading list */}
+                <div className="icon3d-wrap">
+                  <JournalLog />
+                  <ReadingList />
+                  {/* 3D vinyl record: hover shows the song, click plays 10 seconds of it (src/components/vinyl-player.tsx) */}
+                  <VinylPlayer />
+                </div>
+                {/* right of the photo: circuit board, handheld console (3DS-style), then Levi + Aiyu */}
+                <div className="ab-circuit">
+                  <div data-bubble="curious about DIY electronics"><IconHover3D icon="circuit" iconOnly width={102} height={102} /></div>
+                  <div data-bubble="currently playing pokemon ultra sun"><IconHover3D icon="handheld" iconOnly width={102} height={102} /></div>
+                  {/* Levi + Aiyu icon: click opens their photo (src/components/cat-paws.tsx) */}
+                  <CatPaws />
+                </div>
                 <figure className="ab-pic me" data-bubble="hi! that's me!"><img src="/assets/portrait-cutout.webp" width={760} height={964} alt="Sharon smiling, in a cream cable-knit sweater" /></figure>
-                <figure className="ab-pic cats" data-bubble="meet levi + aiyu! ฅ^•ﻌ•^ฅ"><img src="/assets/cats-cutout.webp" width={720} height={763} alt="Sharon's two cats, Levi and Aiyu: a brown tabby with a white chest and a fluffy cream cat" /></figure>
               </div>
-            </div>
-
-            {/* 3D journal icon: hover shows the "journal" bubble, click opens the Journal Log card (src/components/journal-log.tsx) */}
-            <div className="icon3d-wrap">
-              <JournalLog />
             </div>
           </section>
 

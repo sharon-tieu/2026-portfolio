@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { IconHover3D } from '@/components/ui/icon-3d-hover'
 
-/* The 3D journal icon in About. Clicking it opens Sharon's Journal Log card in the middle of the
+/* The 3D pen-and-paper icon in About. Clicking it opens Sharon's Journal Log card in the middle of the
    screen over a dark overlay; "✕ Close", Esc, or a click outside closes it. */
 export function JournalLog() {
   const dlg = useRef<HTMLDialogElement>(null)
@@ -16,7 +16,7 @@ export function JournalLog() {
     <>
       <div className="journal-btn" data-bubble="journal" role="button" tabIndex={0} aria-haspopup="dialog" aria-label="Open my journal log"
         onClick={open} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open() } }}>
-        <IconHover3D icon="journal" iconOnly width={102} height={102} />
+        <IconHover3D icon="pen" iconOnly width={102} height={102} />
       </div>
 
       <dialog ref={dlg} className="journal-dlg" aria-label="Journal log" tabIndex={-1}
