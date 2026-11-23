@@ -163,19 +163,6 @@ export default function App() {
             <div className="icon3d-wrap">
               <JournalLog />
             </div>
-
-            <details className="log">
-              <summary>
-                <span className="tag"><span className="mono">Latest log</span><span className="date">Oct 2026</span></span>
-                <svg className="chev" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>
-              </summary>
-              <p className="latest">3 months into the Innovations Design Program &amp; the Design Development Program at JPMorgan Chase. Rebuilding this portfolio.<span className="caret" aria-hidden="true"></span></p>
-              <ol>
-                <li><span>Jul 2026</span><span>Big moves to New York and trying out every cafe!</span></li>
-                <li><span>Jan 2025 – Jan 2026</span><span>Started and completed UX Academy at Designlab.</span></li>
-                <li><span>Jul 2024</span><span>Technical writing and UX writing at EBizCharge. Learning all things payment processing!</span></li>
-              </ol>
-            </details>
           </section>
 
           <footer><span>© 2026 Sharon Tieu</span><span>Designed in New York</span></footer>
